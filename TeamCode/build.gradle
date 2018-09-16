@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 27
@@ -55,17 +54,14 @@ android {
 }
 
 dependencies {
-    //Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     //FTC libraries
     implementation "com.github.modular-ftc:robotcontroller-repackaged:$ftc_version.0-lite"
     implementation "com.github.modular-ftc:robotcore-repackaged:$ftc_version.0-lite"
     implementation "com.github.modular-ftc:ftc-common-repackaged:$ftc_version.0-lite"
-
     implementation "org.first.ftc:hardware:$ftc_version"
 
-    //The Pattonville Robotics shared libraries are included by default. Remove the following line to stop using them.
-    implementation "com.github.Pattonville-Robotics:Common-Code:ce72e05"
+    //Hazen Robotics Common Code
+    implementation 'com.github.HazenRobotics:common-code-library:master'
 }
 
