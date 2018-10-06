@@ -1,5 +1,5 @@
 buildscript {
-    ext.ftc_version = '3.7'
+    ext.ftc_version = '4.0'
 
     repositories {
         google()

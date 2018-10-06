@@ -24,6 +24,7 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     protected TwoWheels wheels;
     protected DrivingController driving;
 
+
     //Add all Constants here
     //EX: protected final double MOTOR_POWER = 0.5;
     @Override
@@ -39,13 +40,14 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
 
             driving.updateMotion();
 
+
             telemetry.update();
             idle();
         }
     }
     protected void setupHardware() {
         //Initializes the motor/servo variables here
-        wheels = new TwoWheels(this);
+        wheels = new TwoWheels(this, "leftMotor","rightMotor");
         driving = new TankControlsDrivingController(wheels, gamepad1);
     }
 
