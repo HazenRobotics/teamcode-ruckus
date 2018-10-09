@@ -5,7 +5,7 @@
 -keepattributes *Annotation*
 
 #Team Code
--keep,includedescriptorclasses class org.modularftc.** {
+-keep,includedescriptorclasses class com.hazenrobotics.** {
     *;
 }
 
