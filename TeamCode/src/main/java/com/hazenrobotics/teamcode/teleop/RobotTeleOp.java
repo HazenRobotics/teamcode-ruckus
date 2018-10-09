@@ -5,6 +5,7 @@ import com.hazenrobotics.commoncode.interfaces.OpModeInterface;
 import com.hazenrobotics.commoncode.movement.DrivingController;
 import com.hazenrobotics.commoncode.movement.TankControlsDrivingController;
 import com.hazenrobotics.commoncode.movement.TwoWheels;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -14,8 +15,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name="TeleOp", group="TeleOp")
-@Disabled
+@Autonomous(name="TeleOp", group="TeleOp")
 public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     //Add all global objects and lists
     protected ButtonManager buttons = new ButtonManager();
@@ -23,6 +23,7 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     //Add Motors, Servos, Sensors, etc here
     protected TwoWheels wheels;
     protected DrivingController driving;
+    protected DcMotor lift1,lift2;
 
 
     //Add all Constants here
@@ -35,11 +36,14 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
 
         waitForStart();
 
+
         while (opModeIsActive()) {
             buttons.update();
 
             driving.updateMotion();
 
+            lift1.setPower(gamepad2.right_stick_y);
+            lift2.setPower(gamepad2.left_stick_y);
 
             telemetry.update();
             idle();
@@ -49,6 +53,8 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
         //Initializes the motor/servo variables here
         wheels = new TwoWheels(this, "leftMotor","rightMotor");
         driving = new TankControlsDrivingController(wheels, gamepad1);
+        lift1 = getMotor("lift1");
+        lift2 = getMotor("lift2");
     }
 
     protected void setupButtons() {
