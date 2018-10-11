@@ -23,7 +23,11 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     //Add Motors, Servos, Sensors, etc here
     protected TwoWheels wheels;
     protected DrivingController driving;
-    protected DcMotor lift1,lift2;
+    protected DcMotor claw;
+
+    protected final double OPEN_SPEED = -1;
+    protected final double CLOSED_SPEED = 1;
+
 
 
     //Add all Constants here
@@ -42,8 +46,6 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
 
             driving.updateMotion();
 
-            lift1.setPower(gamepad2.right_stick_y);
-            lift2.setPower(gamepad2.left_stick_y);
 
             telemetry.update();
             idle();
@@ -53,9 +55,43 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
         //Initializes the motor/servo variables here
         wheels = new TwoWheels(this, "leftMotor","rightMotor");
         driving = new TankControlsDrivingController(wheels, gamepad1);
-        lift1 = getMotor("lift1");
-        lift2 = getMotor("lift2");
+        claw = getMotor("lift1");
     }
+
+    protected void open(){
+        if (gamepad2.x){
+            while (LIMIT SWITCH NOT HIT){
+                claw.setPower(OPEN_SPEED);
+
+            }
+            claw.setPower(0);
+        }
+    }
+    protected void close(){
+        if (gamepad2.b){
+        (LIMIT SWITCH NOT HIT){
+                claw.setPower(CLOSED_SPEED);
+
+    }
+    claw.setPower(0);
+
+
+    protected  void updateSwitch(){
+        if(gamepad2.x){
+            if(LIMIT SWITCH ISNT HIT)
+                claw.setPower(OPEN_SPEED);
+            else
+                claw.setPower(0);
+        }
+        if(gamepad2.a){
+            if(LIMIT SWITCH ISNT HIT)
+            claw.setPower(CLOSED_SPEED );
+            else
+            claw.setPower(0);
+        }
+
+    }
+
 
     protected void setupButtons() {
         buttons = new ButtonManager();
