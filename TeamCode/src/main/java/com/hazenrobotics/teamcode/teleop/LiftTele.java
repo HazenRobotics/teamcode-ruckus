@@ -17,7 +17,7 @@ public class LiftTele extends LinearOpMode implements OpModeInterface {
     double tension = 0;
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         setupHardware();
         waitForStart();
         while(opModeIsActive()){

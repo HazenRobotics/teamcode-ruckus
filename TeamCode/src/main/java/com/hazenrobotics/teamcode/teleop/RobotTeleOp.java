@@ -2,11 +2,6 @@ package com.hazenrobotics.teamcode.teleop;
 
 import com.hazenrobotics.commoncode.input.ButtonManager;
 import com.hazenrobotics.commoncode.interfaces.OpModeInterface;
-import com.hazenrobotics.commoncode.movement.DrivingController;
-import com.hazenrobotics.commoncode.movement.TankControlsDrivingController;
-import com.hazenrobotics.commoncode.movement.TwoWheels;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -21,8 +16,7 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     protected ButtonManager buttons = new ButtonManager();
 
     //Add Motors, Servos, Sensors, etc here
-    protected TwoWheels wheels;
-    protected DrivingController driving;
+
     protected DcMotor lift1,lift2;
 
 

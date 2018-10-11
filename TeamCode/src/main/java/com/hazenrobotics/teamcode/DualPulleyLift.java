@@ -63,7 +63,7 @@ public class DualPulleyLift {
 
     public enum Direction {
         EXTEND,
-        RETRACT;
+        RETRACT
     }
 
     public static class Coefficients {
