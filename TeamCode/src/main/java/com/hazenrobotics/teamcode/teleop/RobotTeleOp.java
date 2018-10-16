@@ -15,7 +15,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name="TeleOp", group="TeleOp")
+@TeleOp(name="Claw", group="Claw")
 public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     //Add all global objects and lists
     protected ButtonManager buttons = new ButtonManager();
@@ -23,11 +23,8 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     //Add Motors, Servos, Sensors, etc here
     protected TwoWheels wheels;
     protected DrivingController driving;
-    protected DcMotor claw;
-
-    protected final double OPEN_SPEED = -1;
-    protected final double CLOSED_SPEED = 1;
-
+    protected Servo claw;
+    protected Toggle toggle;
 
 
     //Add all Constants here
@@ -45,8 +42,7 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
             buttons.update();
 
             driving.updateMotion();
-
-
+        
             telemetry.update();
             idle();
         }
@@ -55,48 +51,30 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
         //Initializes the motor/servo variables here
         wheels = new TwoWheels(this, "leftMotor","rightMotor");
         driving = new TankControlsDrivingController(wheels, gamepad1);
-        claw = getMotor("lift1");
+        claw= new Servo("Claw");
     }
 
-    protected void open(){
-        if (gamepad2.x){
-            while (LIMIT SWITCH NOT HIT){
-                claw.setPower(OPEN_SPEED);
-
-            }
-            claw.setPower(0);
-        }
-    }
-    protected void close(){
-        if (gamepad2.b){
-        (LIMIT SWITCH NOT HIT){
-                claw.setPower(CLOSED_SPEED);
-
-    }
-    claw.setPower(0);
-
-
-    protected  void updateSwitch(){
-        if(gamepad2.x){
-            if(LIMIT SWITCH ISNT HIT)
-                claw.setPower(OPEN_SPEED);
-            else
-                claw.setPower(0);
-        }
-        if(gamepad2.a){
-            if(LIMIT SWITCH ISNT HIT)
-            claw.setPower(CLOSED_SPEED );
-            else
-            claw.setPower(0);
-        }
-
-    }
+  
 
 
     protected void setupButtons() {
         buttons = new ButtonManager();
+        buttons.add(new Toggle() {
+            @Override
+            public void onActivate(){
+               claw.setPosition(OPEN);
+            }
+            @Override 
+            public void onDeactivate(){
+               claw.setPosition(CLOSE); 
+            }
+            public boolean isInputPressed() {
+                return gamepad1.a;
+            }
+        });
     }
-
+    
+    
     @Override
     public Gamepad getGamepad1() {
         return gamepad1;
@@ -125,5 +103,16 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     @Override
     public HardwareDevice get(String name) {
         return hardwareMap.get(name);
+    }
+    
+    public enum Position {
+        OPEN(10),
+        CLOSED(100);
+        
+        public final int servoPosition;
+        
+        public Position(int servoPosition) {
+            this.servoPosition = servoPosition;
+        }
     }
 }
