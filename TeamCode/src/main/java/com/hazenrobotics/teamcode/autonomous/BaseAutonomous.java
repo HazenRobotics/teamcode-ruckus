@@ -1,6 +1,15 @@
 package com.hazenrobotics.teamcode.autonomous;
 
 import com.hazenrobotics.commoncode.interfaces.OpModeInterface;
+import com.hazenrobotics.commoncode.models.angles.Angle;
+import static com.hazenrobotics.commoncode.models.angles.UnnormalizedAngleUnit.*;
+import static com.hazenrobotics.commoncode.models.angles.directions.RotationDirection.*;
+
+import static com.hazenrobotics.commoncode.models.angles.directions.SimpleDirection.*;
+import com.hazenrobotics.commoncode.models.conditions.GyroAngle;
+import com.hazenrobotics.commoncode.models.conditions.RangeDistance;
+import com.hazenrobotics.commoncode.models.distances.Distance;
+import com.hazenrobotics.commoncode.movement.TwoEncoderWheels;
 import com.hazenrobotics.commoncode.movement.TwoWheels;
 import com.hazenrobotics.commoncode.sensors.I2cColorSensor;
 import com.hazenrobotics.commoncode.sensors.I2cGyroSensor;
@@ -12,15 +21,23 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.*;
+
 public abstract class BaseAutonomous extends LinearOpMode implements OpModeInterface {
 
-    I2cColorSensor colorSensorSide;
-    I2cColorSensor colorSensorBottom;
+    protected I2cColorSensor colorSensorSide;
+    protected I2cColorSensor colorSensorBottom;
 
-    I2cRangeSensor rangeSensorFront;
-    I2cGyroSensor gyroSensor;
+    protected I2cRangeSensor rangeSensorFront;
+    protected I2cGyroSensor gyroSensor;
 
-    TwoWheels wheels;
+    protected Angle angleToDepot;
+
+    public BaseAutonomous(Angle angleToDeopt) {
+        this.angleToDepot = angleToDeopt;
+    }
+
+    protected TwoEncoderWheels wheels;
 
     public void runOpMode() {
         setupHardware();
@@ -35,8 +52,20 @@ public abstract class BaseAutonomous extends LinearOpMode implements OpModeInter
 
     protected void step1() {
 
+        //TODO: Drop down code
+        wheels.move(new Distance(10, INCH),BACKWARDS);
+        wheels.turn(new Angle(135, DEGREES),COUNTER_CLOCKWISE);
+
+
+
     }
-    protected abstract void step2();
+
+    protected void step2() {
+        ///.....
+
+        wheels.move(new RangeDistance(new Distance(10, INCH), rangeSensorFront, true), FORWARDS);
+        wheels.turn(new GyroAngle(angleToDepot, gyroSensor, CLOCKWISE), CLOCKWISE);
+    }
 
     protected void step3 () {
 
