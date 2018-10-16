@@ -15,6 +15,8 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import static com.hazenrobotics.teamcode.ServoClawPosition.*;
+
 @TeleOp(name="Claw", group="Claw")
 public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     //Add all global objects and lists
@@ -24,7 +26,6 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     protected TwoWheels wheels;
     protected DrivingController driving;
     protected Servo claw;
-    protected Toggle toggle;
 
 
     //Add all Constants here
@@ -104,15 +105,5 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     public HardwareDevice get(String name) {
         return hardwareMap.get(name);
     }
-    
-    public enum Position {
-        OPEN(10),
-        CLOSED(100);
-        
-        public final int servoPosition;
-        
-        public Position(int servoPosition) {
-            this.servoPosition = servoPosition;
-        }
-    }
+}
 }
