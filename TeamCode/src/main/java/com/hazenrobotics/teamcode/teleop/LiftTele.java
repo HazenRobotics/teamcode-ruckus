@@ -9,6 +9,8 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.Servo;
+
+//basic idea
 @Disabled
 @TeleOp(name = "LiftTest",group = "TeleOp")
 public class LiftTele extends LinearOpMode implements OpModeInterface {

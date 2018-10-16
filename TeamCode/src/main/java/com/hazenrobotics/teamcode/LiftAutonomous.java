@@ -2,6 +2,7 @@ package com.hazenrobotics.teamcode;
 
 import com.hazenrobotics.commoncode.interfaces.OpModeInterface;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -9,6 +10,8 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.Servo;
 
+//basic idea
+@Disabled
 @Autonomous(name="LiftAutonomous",group="Autonomous")
 public class LiftAutonomous extends LinearOpMode implements OpModeInterface {
     protected DcMotor robotUp;
