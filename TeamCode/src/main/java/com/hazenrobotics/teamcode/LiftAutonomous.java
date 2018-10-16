@@ -25,7 +25,7 @@ public class LiftAutonomous extends LinearOpMode implements OpModeInterface {
         timer=getRuntime()-startingTime;
         while(opModeIsActive()&&(timer<endTime)){
             robotUp.setPower(-0.5);
-            liftUp.setPower(0.55);
+            liftUp.setPower(0.5);
             timer=getRuntime()-startingTime;
             idle();
         }
