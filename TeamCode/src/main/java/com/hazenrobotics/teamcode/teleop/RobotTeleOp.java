@@ -1,6 +1,7 @@
 package com.hazenrobotics.teamcode.teleop;
 
 import com.hazenrobotics.commoncode.input.ButtonManager;
+import com.hazenrobotics.commoncode.input.Toggle;
 import com.hazenrobotics.commoncode.interfaces.OpModeInterface;
 import com.hazenrobotics.commoncode.movement.DrivingController;
 import com.hazenrobotics.commoncode.movement.TankControlsDrivingController;
@@ -52,7 +53,7 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
         //Initializes the motor/servo variables here
         wheels = new TwoWheels(this, "leftMotor","rightMotor");
         driving = new TankControlsDrivingController(wheels, gamepad1);
-        claw= new Servo("Claw");
+        claw= getServo("Claw");
     }
 
   
@@ -63,11 +64,11 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
         buttons.add(new Toggle() {
             @Override
             public void onActivate(){
-               claw.setPosition(OPEN);
+               claw.setPosition(OPEN.servoPosition);
             }
             @Override 
             public void onDeactivate(){
-               claw.setPosition(CLOSE); 
+               claw.setPosition(CLOSED.servoPosition);
             }
             public boolean isInputPressed() {
                 return gamepad1.a;
@@ -106,4 +107,4 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
         return hardwareMap.get(name);
     }
 }
-}
+

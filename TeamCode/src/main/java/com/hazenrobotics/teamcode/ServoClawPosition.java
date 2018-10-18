@@ -1,10 +1,12 @@
- public enum ServoClawPosition {
+package com.hazenrobotics.teamcode;
+
+public enum ServoClawPosition {
       OPEN(10),
       CLOSED(100);
 
-      public final int servoPosition;
+      public int servoPosition =0;
 
-      public Position(int servoPosition) {
+       ServoClawPosition(int servoPosition) {
           this.servoPosition = servoPosition;
       }
   }
