@@ -17,7 +17,6 @@ public class LiftTele extends LinearOpMode implements OpModeInterface {
     protected DcMotor robotUp;
     protected DcMotor liftUp;
     boolean toggle = true;
-    double tension = 0;
 
     @Override
     public void runOpMode() {
@@ -29,8 +28,8 @@ public class LiftTele extends LinearOpMode implements OpModeInterface {
                 liftUp.setPower(-gamepad2.right_stick_y);
             }
             else{
-                robotUp.setPower(tension);
-                liftUp.setPower(0);
+                robotUp.setPower(gamepad2.right_stick_y);
+                liftUp.setPower(gamepad2.left_stick_y);
             }
             if(gamepad2.x){
                 toggle = false;

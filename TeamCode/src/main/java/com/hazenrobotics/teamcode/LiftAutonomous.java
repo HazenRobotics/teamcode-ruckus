@@ -1,6 +1,8 @@
 package com.hazenrobotics.teamcode;
 
 import com.hazenrobotics.commoncode.interfaces.OpModeInterface;
+import com.hazenrobotics.commoncode.models.conditions.Condition;
+import com.hazenrobotics.commoncode.models.conditions.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -11,63 +13,52 @@ import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.Servo;
 
 //basic idea
-@Disabled
 @Autonomous(name="LiftAutonomous",group="Autonomous")
 public class LiftAutonomous extends LinearOpMode implements OpModeInterface {
-    protected DcMotor robotUp;
-    protected DcMotor liftUp;
-    protected double startingTime;
-    protected double timer=-1;
-    protected double endTime=0;
+    protected DualPulleyLift lift;
 
     @Override
     public void runOpMode(){
         setupHardware();
         waitForStart();
-        startingTime=getRuntime();
-        timer=getRuntime()-startingTime;
-        while(opModeIsActive()&&(timer<endTime)){
-            robotUp.setPower(-0.5);
-            liftUp.setPower(0.5);
-            timer=getRuntime()-startingTime;
-            idle();
-        }
-        robotUp.setPower(0);
-        liftUp.setPower(0);
+
+        //The timer is variable(2000-2500)
+        lift.slide(new Timer(2500), DualPulleyLift.Direction.EXTEND);
+        for(Condition t = new Timer(3000); !t.isTrue(); idle());
+        lift.slide(new Timer(2500), DualPulleyLift.Direction.RETRACT);
     }
 
     public void setupHardware(){
-        robotUp = getMotor("lift1");
-        liftUp = getMotor("lift2");
+        lift = new DualPulleyLift(this, "lift1", "lift2", 0.5f);
     }
 
     @Override
     public Gamepad getGamepad1() {
-        return null;
+        return gamepad1;
     }
 
     @Override
     public Gamepad getGamepad2() {
-        return null;
+        return gamepad2;
     }
 
     @Override
     public DcMotor getMotor(String name) {
-        return null;
+        return hardwareMap.dcMotor.get(name);
     }
 
     @Override
     public Servo getServo(String name) {
-        return null;
+        return hardwareMap.servo.get(name);
     }
 
     @Override
     public DigitalChannel getDigitalChannel(String name) {
-        return null;
+        return hardwareMap.digitalChannel.get(name);
     }
 
     @Override
     public HardwareDevice get(String name) {
-        return null;
+        return hardwareMap.get(name);
     }
 }
