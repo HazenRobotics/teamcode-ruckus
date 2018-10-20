@@ -14,6 +14,8 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 @TeleOp(name="TeleOp", group="TeleOp")
 @Disabled
 public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
@@ -83,5 +85,9 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     @Override
     public HardwareDevice get(String name) {
         return hardwareMap.get(name);
+    }
+
+    public Telemetry getTelemetry() {
+        return telemetry;
     }
 }

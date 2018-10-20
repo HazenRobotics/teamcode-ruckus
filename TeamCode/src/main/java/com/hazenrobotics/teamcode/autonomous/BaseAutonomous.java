@@ -20,10 +20,15 @@ import com.hazenrobotics.commoncode.sensors.I2cGyroSensor;
 import com.hazenrobotics.commoncode.sensors.I2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorImpl;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
+import com.qualcomm.robotcore.hardware.I2cAddr;
+import com.qualcomm.robotcore.hardware.I2cDevice;
 import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.*;
 
@@ -37,6 +42,9 @@ public abstract class BaseAutonomous extends LinearOpMode implements OpModeInter
 
     protected Angle angleToDepot;
 
+    protected static final Distance DISTANCE_FROM_LEFT_WALL = new Distance(13.798f, INCH);
+    protected static final Distance DISTANCE_FROM_RIGHT_WALL = new Distance(2.971f, INCH);
+
     public BaseAutonomous(Angle angleToDeopt) {
         this.angleToDepot = angleToDeopt;
     }
@@ -48,30 +56,28 @@ public abstract class BaseAutonomous extends LinearOpMode implements OpModeInter
 
         waitForStart();
 
-        step1();
-        step2();
-        step3();
+        landAndMove();
+        sampleMinerals();
+        claimDepotAndPark();
     }
 
 
-    protected void step1() {
+    protected void landAndMove() {
 
         //TODO: Drop down code
-        wheels.move(new Distance(10, INCH),BACKWARDS);
+
+        //Backs up to not hit lander
+        //wheels.move(new Distance(3, INCH),BACKWARDS);
+        //we are now FACING THE WALL!!!
         wheels.turn(new Angle(135, DEGREES),COUNTER_CLOCKWISE);
-        //wheels.move(new Distance());
-        //wheels.turn(new Angle());
-      ;
-
-
+        //Move towards wall (to line up with minerals)
+        wheels.move(new RangeDistance(DISTANCE_FROM_LEFT_WALL, rangeSensorFront, false), FORWARDS);
+        //Turn to be parallel with minerals
+        wheels.turn(new Angle(135, DEGREES), COUNTER_CLOCKWISE);
     }
 
-    protected void step2() {
-        ///.....
-        //
-
-        wheels.move(new RangeDistance(new Distance(10, INCH), rangeSensorFront, true), FORWARDS);
-
+    protected void sampleMinerals() {
+        //Move until found gold mineral
         wheels.move(new Condition() {
             NamedColorList colorList = getColorList();
             private NamedColorList getColorList() {
@@ -87,26 +93,50 @@ public abstract class BaseAutonomous extends LinearOpMode implements OpModeInter
             protected boolean condition() {
                 return colorList.contains(colorSensorSide.getColor());
             }
+
+            //Turn 360 Degrees clockwise to move mineral
         }, FORWARDS);
         wheels.turn(new Angle(360, DEGREES), CLOCKWISE);
-        //
-        wheels.move(new RangeDistance(new Distance(0, INCH), rangeSensorFront, false), FORWARDS);
+
+        //Robot moves towards the wall, then turns to go to Depot
+        wheels.move(new RangeDistance(DISTANCE_FROM_RIGHT_WALL, rangeSensorFront, false), FORWARDS);
         wheels.turn(new GyroAngle(angleToDepot, gyroSensor, CLOCKWISE), CLOCKWISE);
     }
+    protected void claimDepotAndPark() {
 
-    protected void step3 () {
+        //Robot moves to Depot and puts marker down to cliam
         wheels.move(new RangeDistance(new Distance(24, INCH),rangeSensorFront, false), FORWARDS);
         //TODO: Claim depot
 
+        //Robot moves to Crater and parks
+        wheels.move(new Condition() {
+            @Override
+            protected boolean condition() {
+                return colorSensorSide.getColor() == SensorColor.BLACK;
+                }
+            }, BACKWARDS);
     }
 
     protected void setupHardware() {
+        rangeSensorFront = new I2cRangeSensor((I2cDevice) get("rangeSensor"));
+        colorSensorBottom = new I2cColorSensor((I2cDevice) get("colorSensorBottom"), new I2cAddr(0x3a));
+        colorSensorSide = new I2cColorSensor((I2cDevice) get("colorSensorSide"), new I2cAddr(0X3c));
+        gyroSensor = new I2cGyroSensor((I2cDevice) get("gyroSensor"));
+        gyroSensor.calibrate();
+        while (gyroSensor.isCalibrating()) {
+            idle();
+        }
         wheels = new TwoEncoderWheels(this, "leftMotor", "rightMotor",
+                new TwoEncoderWheels.EncoderConfiguration(1680, new Distance(101.06f, MM), new Distance(37.3f, CM)),
+                new TwoWheels.SpeedSettings(1f, 0.5f, 0.7f));
+
+        /*new TwoEncoderWheels(this, "leftMotor", "rightMotor",
                 new TwoEncoderWheels.EncoderConfiguration(1680, new Distance(37f, MM),
-                        new Distance(37.3f, CM)));
-
-
+                        new Distance(37.3f, CM)));*/
     }
+
+
+
 
     @Override
     public Gamepad getGamepad1() {
@@ -136,5 +166,9 @@ public abstract class BaseAutonomous extends LinearOpMode implements OpModeInter
     @Override
     public HardwareDevice get(String name) {
         return hardwareMap.get(name);
+    }
+
+    public Telemetry getTelemetry() {
+        return telemetry;
     }
 }
