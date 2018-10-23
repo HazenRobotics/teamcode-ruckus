@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
@@ -49,7 +50,8 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     }
     protected void setupHardware() {
         //Initializes the motor/servo variables here
-        wheels = new TwoWheels(this, "leftMotor","rightMotor");
+        TwoWheels.WheelConfiguration configuration = new TwoWheels.WheelConfiguration("leftMotor","rightMotor", DcMotor.Direction.FORWARD, DcMotor.Direction.REVERSE);
+        wheels = new TwoWheels(this, configuration);
         driving = new TankControlsDrivingController(wheels, gamepad1);
     }
 

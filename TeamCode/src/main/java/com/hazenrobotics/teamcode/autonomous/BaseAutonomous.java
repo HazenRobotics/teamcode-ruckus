@@ -21,6 +21,7 @@ import com.hazenrobotics.commoncode.sensors.I2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorImpl;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
@@ -67,7 +68,7 @@ public abstract class BaseAutonomous extends LinearOpMode implements OpModeInter
         //TODO: Drop down code
 
         //Backs up to not hit lander
-        //wheels.move(new Distance(3, INCH),BACKWARDS);
+        wheels.move(new Distance(3, INCH),BACKWARDS);
         //we are now FACING THE WALL!!!
         wheels.turn(new Angle(135, DEGREES),COUNTER_CLOCKWISE);
         //Move towards wall (to line up with minerals)
@@ -121,14 +122,24 @@ public abstract class BaseAutonomous extends LinearOpMode implements OpModeInter
         rangeSensorFront = new I2cRangeSensor((I2cDevice) get("rangeSensor"));
         colorSensorBottom = new I2cColorSensor((I2cDevice) get("colorSensorBottom"), new I2cAddr(0x3a));
         colorSensorSide = new I2cColorSensor((I2cDevice) get("colorSensorSide"), new I2cAddr(0X3c));
+        getMotor("leftMotor").setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        getMotor("rightMotor").setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        getMotor("leftMotor").setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        getMotor("rightMotor").setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         gyroSensor = new I2cGyroSensor((I2cDevice) get("gyroSensor"));
         gyroSensor.calibrate();
-        while (gyroSensor.isCalibrating()) {
+        telemetry.addData("Calibrating", "");
+        telemetry.update();
+        /*while (gyroSensor.isCalibrating()) {
             idle();
-        }
-        wheels = new TwoEncoderWheels(this, "leftMotor", "rightMotor",
-                new TwoEncoderWheels.EncoderConfiguration(1680, new Distance(101.06f, MM), new Distance(37.3f, CM)),
-                new TwoWheels.SpeedSettings(1f, 0.5f, 0.7f));
+        }*/
+        telemetry.update();
+
+        TwoWheels.WheelConfiguration wheelConfiguration = new TwoWheels.WheelConfiguration("leftMotor", "rightMotor", DcMotor.Direction.FORWARD, DcMotor.Direction.REVERSE);
+        TwoEncoderWheels.EncoderConfiguration encoderConfiguration = new TwoEncoderWheels.EncoderConfiguration(1680, new Distance(101.06f, MM), new Distance(37.3f, CM));
+        TwoWheels.SpeedSettings speeds = new TwoWheels.SpeedSettings(1f, 0.5f, 0.7f);
+
+        wheels = new TwoEncoderWheels(this, wheelConfiguration, encoderConfiguration, speeds);
 
         /*new TwoEncoderWheels(this, "leftMotor", "rightMotor",
                 new TwoEncoderWheels.EncoderConfiguration(1680, new Distance(37f, MM),
