@@ -16,6 +16,8 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 @TeleOp(name="TeleOp", group="TeleOp")
 public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     //Add all global objects and lists
@@ -52,7 +54,7 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     }
     protected void setupHardware() {
         //Initializes the motor/servo variables here
-        wheels = new TwoWheels(this, "leftMotor","rightMotor", TwoWheels.DEFAULT_SPEEDS, DcMotorSimple.Direction.FORWARD, DcMotorSimple.Direction.REVERSE);
+        wheels = new TwoWheels(this, new TwoWheels.WheelConfiguration("leftMotor","rightMotor", DcMotorSimple.Direction.FORWARD, DcMotorSimple.Direction.REVERSE), TwoWheels.DEFAULT_SPEEDS);
         driving = new TankControlsDrivingController(wheels, gamepad1);
         extendLift = getMotor("lift1");
         retractLift = getMotor("lift2");
@@ -90,5 +92,10 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     @Override
     public HardwareDevice get(String name) {
         return hardwareMap.get(name);
+    }
+
+    @Override
+    public Telemetry getTelemetry() {
+        return telemetry;
     }
 }
