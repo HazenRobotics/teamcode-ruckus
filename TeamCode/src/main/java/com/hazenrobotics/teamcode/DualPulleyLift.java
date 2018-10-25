@@ -3,6 +3,7 @@ package com.hazenrobotics.teamcode;
 import com.hazenrobotics.commoncode.interfaces.OpModeInterface;
 import com.hazenrobotics.commoncode.models.conditions.Condition;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 public class DualPulleyLift {
     protected OpModeInterface opModeInterface;
@@ -23,7 +24,7 @@ public class DualPulleyLift {
         retractingMotor = opModeInterface.getMotor(retractingMotorName);
 
         extendingMotor.setDirection(DcMotor.Direction.FORWARD);
-        extendingMotor.setDirection(DcMotor.Direction.FORWARD);
+        retractingMotor.setDirection(DcMotor.Direction.REVERSE);
         this.slideSpeed = slideSpeed;
     }
 

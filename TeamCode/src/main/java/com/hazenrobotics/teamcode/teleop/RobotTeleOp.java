@@ -5,6 +5,8 @@ import com.hazenrobotics.commoncode.interfaces.OpModeInterface;
 import com.hazenrobotics.commoncode.movement.DrivingController;
 import com.hazenrobotics.commoncode.movement.TankControlsDrivingController;
 import com.hazenrobotics.commoncode.movement.TwoWheels;
+import com.hazenrobotics.teamcode.DualPulleyLift;
+import com.hazenrobotics.teamcode.DualPulleyLiftController;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -26,6 +28,8 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     //Add Motors, Servos, Sensors, etc here
     protected TwoWheels wheels;
     protected DrivingController driving;
+    protected DualPulleyLiftController liftController;
+    protected DualPulleyLift lift;
 
 
     //Add all Constants here
@@ -36,22 +40,28 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
         setupButtons();
         //Add any further initialization (methods) here
 
+        telemetry.addData("Inited","");
+        telemetry.update();
+
         waitForStart();
+
+
 
         while (opModeIsActive()) {
             buttons.update();
-
-            driving.updateMotion();
-
-
+            telemetry.addData("Started","");
             telemetry.update();
+            driving.updateMotion();
+            liftController.updateMotion();
             idle();
         }
     }
     protected void setupHardware() {
         //Initializes the motor/servo variables here
-        wheels = new TwoWheels(this, "leftMotor","rightMotor");
+        wheels = new TwoWheels(this, new TwoWheels.WheelConfiguration("leftMotor","rightMotor",DcMotorSimple.Direction.REVERSE, DcMotorSimple.Direction.FORWARD));
         driving = new TankControlsDrivingController(wheels, gamepad1);
+        lift = new DualPulleyLift(this, "extendingMotor","retractingMotor", 0.5f);
+        liftController = new DualPulleyLiftController(lift,gamepad2,0.5f);
     }
 
     protected void setupButtons() {
