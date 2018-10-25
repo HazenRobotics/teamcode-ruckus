@@ -26,7 +26,6 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     //Add Motors, Servos, Sensors, etc here
     protected TwoWheels wheels;
     protected DrivingController driving;
-    protected DcMotor extendLift,retractLift;
 
 
     //Add all Constants here
@@ -39,14 +38,11 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
 
         waitForStart();
 
-
         while (opModeIsActive()) {
             buttons.update();
 
             driving.updateMotion();
 
-            extendLift.setPower(-gamepad2.right_stick_y);
-            retractLift.setPower(gamepad2.right_stick_y);
 
             telemetry.update();
             idle();
@@ -54,10 +50,8 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     }
     protected void setupHardware() {
         //Initializes the motor/servo variables here
-        wheels = new TwoWheels(this, new TwoWheels.WheelConfiguration("leftMotor","rightMotor", DcMotorSimple.Direction.FORWARD, DcMotorSimple.Direction.REVERSE), TwoWheels.DEFAULT_SPEEDS);
+        wheels = new TwoWheels(this, "leftMotor","rightMotor");
         driving = new TankControlsDrivingController(wheels, gamepad1);
-        extendLift = getMotor("lift1");
-        retractLift = getMotor("lift2");
     }
 
     protected void setupButtons() {
