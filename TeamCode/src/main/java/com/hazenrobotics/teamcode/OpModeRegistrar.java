@@ -1,9 +1,9 @@
 package com.hazenrobotics.teamcode;
 
+import com.hazenrobotics.commoncode.testclasses.MRGyroDebug;
 import com.hazenrobotics.commoncode.testclasses.TwoWheelsDebug;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
-
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeMeta;
 
 import java.util.ArrayList;
@@ -22,6 +22,7 @@ public final class OpModeRegistrar {
         List<OpModeEntry> list = new ArrayList<>();
 
         list.add(new OpModeEntry("Two Wheels Debug", "Test", TELEOP, TwoWheelsDebug.class));
+        list.add(new OpModeEntry("Gyro Test", "Test", TELEOP, MRGyroDebug.class));
 
         return list;
     }
