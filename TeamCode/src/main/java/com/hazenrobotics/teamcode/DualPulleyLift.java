@@ -49,7 +49,7 @@ public class DualPulleyLift {
         //TODO: Might need more complex control over motors here (maybe even be based off of their current pos.)
         //Multiply by modifier when reversing to ensure tension stays on both pulleys
         coefficients.extending = direction.equals(Direction.EXTEND) ? 1f : -1f * unravelingSpeedModifier;
-        coefficients.retracting = direction.equals(Direction.EXTEND) ? -1f * unravelingSpeedModifier : 1f;
+        coefficients.retracting = direction.equals(Direction.EXTEND) ? -0.3f * unravelingSpeedModifier : 0.3f;
         return coefficients;
     }
 

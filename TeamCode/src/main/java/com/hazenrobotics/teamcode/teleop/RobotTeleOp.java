@@ -7,8 +7,6 @@ import com.hazenrobotics.commoncode.movement.TankControlsDrivingController;
 import com.hazenrobotics.commoncode.movement.TwoWheels;
 import com.hazenrobotics.teamcode.DualPulleyLift;
 import com.hazenrobotics.teamcode.DualPulleyLiftController;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -34,7 +32,8 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
 
     //Add all Constants here
     //EX: protected final double MOTOR_POWER = 0.5;
-    private static final float SLIDE_SPEED = 0.5f;
+    protected static final float SLIDE_SPEED = 0.5f;
+    protected static final float LIFT_SLOW_MOTOR = 1f;
     
     @Override
     public void runOpMode() {
@@ -63,7 +62,7 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
         //Initializes the motor/servo variables here
         wheels = new TwoWheels(this, new TwoWheels.WheelConfiguration("leftMotor","rightMotor",DcMotorSimple.Direction.REVERSE, DcMotorSimple.Direction.FORWARD));
         driving = new TankControlsDrivingController(wheels, gamepad1);
-        lift = new DualPulleyLift(this, "extendingMotor","retractingMotor", SLIDE_SPEED);
+        lift = new DualPulleyLift(this, "extendingMotor","retractingMotor", SLIDE_SPEED, LIFT_SLOW_MOTOR);
         liftController = new DualPulleyLiftController(lift,gamepad2, SLIDE_SPEED);
     }
     

@@ -92,8 +92,7 @@ public class DepotSimpleAutonomous extends LinearOpMode implements OpModeInterfa
         lift = new DualPulleyLift(this,
                 "extendingMotor", //Extending name
                 "retractingMotor", //Retracting name
-                1.0f, //Speed
-                1.0f); //Unraveling speed modifier
+                1.0f); //Speed
     }
 
     @Override
