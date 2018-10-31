@@ -28,12 +28,15 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     //Add Motors, Servos, Sensors, etc here
     protected TwoWheels wheels;
     protected DrivingController driving;
-    protected DualPulleyLiftController liftController;
-    protected DualPulleyLift lift;
+    protected DcMotor extendingMotor, retractingMotor;
 
 
     //Add all Constants here
     //EX: protected final double MOTOR_POWER = 0.5;
+    protected final double TIGHTEN_COEFFICIENT = -0.5625;
+    protected final double LOOSEN_COEFFICIENT = 0.75;
+    
+    
     @Override
     public void runOpMode() {
         setupHardware();
@@ -52,18 +55,36 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
             telemetry.addData("Started","");
             telemetry.update();
             driving.updateMotion();
-            liftController.updateMotion();
+            lift();
             idle();
         }
     }
+    
     protected void setupHardware() {
         //Initializes the motor/servo variables here
         wheels = new TwoWheels(this, new TwoWheels.WheelConfiguration("leftMotor","rightMotor",DcMotorSimple.Direction.REVERSE, DcMotorSimple.Direction.FORWARD));
         driving = new TankControlsDrivingController(wheels, gamepad1);
-        lift = new DualPulleyLift(this, "extendingMotor","retractingMotor", 0.5f);
-        liftController = new DualPulleyLiftController(lift,gamepad2,0.5f);
+        extendingMotor = hardwareMap.DcMotor.get("extendingMotor");
+        retractingMotor = hardwareMap.DcMotor.get("retractingMotor");
+        extendingMotor.setDirection(Direction.FORWARD);
+        retractingMotor.setDirection(Direction.REVERSE);
     }
 
+    protected void lift() {
+        if(gamepad2.dpad_up){
+            extendingMotor.setPower(TIGHTEN_COEFFICIENT);
+            retractingMotor.setPower(LOOSEN_COEFFICIENT);
+        }
+        else if(gamepad2.dpad_down){
+            extendingMotor.setPower(LOOSEN_COEFFICIENT);
+            retractingMotor.setPower(TIGHTEN_COEFFICIENT);
+        }
+        else{
+            extendingMotor.setPower(0);
+            retractingMotor.setPower(0);
+        }
+    }
+    
     protected void setupButtons() {
         buttons = new ButtonManager();
     }
