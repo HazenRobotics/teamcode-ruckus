@@ -28,14 +28,13 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     //Add Motors, Servos, Sensors, etc here
     protected TwoWheels wheels;
     protected DrivingController driving;
-    protected DcMotor extendingMotor, retractingMotor;
+    protected DualPulleyLiftController liftController;
+    protected DualPulleyLift lift;
 
 
     //Add all Constants here
     //EX: protected final double MOTOR_POWER = 0.5;
-    protected final double TIGHTEN_COEFFICIENT = -0.5625;
-    protected final double LOOSEN_COEFFICIENT = 0.75;
-    
+    private static final float SLIDE_SPEED = 0.5f;
     
     @Override
     public void runOpMode() {
@@ -55,7 +54,7 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
             telemetry.addData("Started","");
             telemetry.update();
             driving.updateMotion();
-            lift();
+            liftController.updateMotion();
             idle();
         }
     }
@@ -64,25 +63,8 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
         //Initializes the motor/servo variables here
         wheels = new TwoWheels(this, new TwoWheels.WheelConfiguration("leftMotor","rightMotor",DcMotorSimple.Direction.REVERSE, DcMotorSimple.Direction.FORWARD));
         driving = new TankControlsDrivingController(wheels, gamepad1);
-        extendingMotor = hardwareMap.DcMotor.get("extendingMotor");
-        retractingMotor = hardwareMap.DcMotor.get("retractingMotor");
-        extendingMotor.setDirection(Direction.FORWARD);
-        retractingMotor.setDirection(Direction.REVERSE);
-    }
-
-    protected void lift() {
-        if(gamepad2.dpad_up){
-            extendingMotor.setPower(TIGHTEN_COEFFICIENT);
-            retractingMotor.setPower(LOOSEN_COEFFICIENT);
-        }
-        else if(gamepad2.dpad_down){
-            extendingMotor.setPower(LOOSEN_COEFFICIENT);
-            retractingMotor.setPower(TIGHTEN_COEFFICIENT);
-        }
-        else{
-            extendingMotor.setPower(0);
-            retractingMotor.setPower(0);
-        }
+        lift = new DualPulleyLift(this, "extendingMotor","retractingMotor", SLIDE_SPEED);
+        liftController = new DualPulleyLiftController(lift,gamepad2, SLIDE_SPEED);
     }
     
     protected void setupButtons() {

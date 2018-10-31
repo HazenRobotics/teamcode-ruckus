@@ -17,7 +17,13 @@ public class DualPulleyLift {
 
     protected static final Coefficients ZEROED_COEFFICIENTS = new Coefficients(0f, 0f);
 
+    protected final float unravelingSpeedModifier;
+
     public DualPulleyLift(OpModeInterface opModeInterface, String extendingMotorName, String retractingMotorName, float slideSpeed) {
+        this(opModeInterface, extendingMotorName, retractingMotorName, slideSpeed, 1);
+    }
+
+    public DualPulleyLift(OpModeInterface opModeInterface, String extendingMotorName, String retractingMotorName, float slideSpeed, float unravelingSpeedModifier) {
         this.opModeInterface = opModeInterface;
 
         extendingMotor = opModeInterface.getMotor(extendingMotorName);
@@ -26,6 +32,7 @@ public class DualPulleyLift {
         extendingMotor.setDirection(DcMotor.Direction.FORWARD);
         retractingMotor.setDirection(DcMotor.Direction.REVERSE);
         this.slideSpeed = slideSpeed;
+        this.unravelingSpeedModifier = unravelingSpeedModifier;
     }
 
     public void slide(Condition condition, Direction direction) {
@@ -40,8 +47,9 @@ public class DualPulleyLift {
         Coefficients coefficients = new Coefficients();
 
         //TODO: Might need more complex control over motors here (maybe even be based off of their current pos.)
-        coefficients.extending = direction.equals(Direction.EXTEND) ? 1f : -1f;
-        coefficients.retracting = direction.equals(Direction.EXTEND) ? -1f : 1f;
+        //Multiply by modifier when reversing to ensure tension stays on both pulleys
+        coefficients.extending = direction.equals(Direction.EXTEND) ? 1f : -1f * unravelingSpeedModifier;
+        coefficients.retracting = direction.equals(Direction.EXTEND) ? -1f * unravelingSpeedModifier : 1f;
         return coefficients;
     }
 
