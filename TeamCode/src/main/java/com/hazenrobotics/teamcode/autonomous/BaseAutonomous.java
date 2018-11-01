@@ -40,11 +40,15 @@ public abstract class BaseAutonomous extends LinearOpMode implements OpModeInter
 
     protected I2cRangeSensor rangeSensorFront;
     protected I2cGyroSensor gyroSensor;
+    protected Servo flickerServo;
 
     protected Angle angleToDepot;
 
     protected static final Distance DISTANCE_FROM_LEFT_WALL = new Distance(13.798f, INCH);
     protected static final Distance DISTANCE_FROM_RIGHT_WALL = new Distance(2.971f, INCH);
+
+    protected final static double SERVO_START = 40;
+    protected final static double SERVO_END = 0;
 
     public BaseAutonomous(Angle angleToDeopt) {
         this.angleToDepot = angleToDeopt;
@@ -61,6 +65,7 @@ public abstract class BaseAutonomous extends LinearOpMode implements OpModeInter
         sampleMinerals();
         claimDepotAndPark();
     }
+
 
 
     protected void landAndMove() {
@@ -107,7 +112,11 @@ public abstract class BaseAutonomous extends LinearOpMode implements OpModeInter
 
         //Robot moves to Depot and puts marker down to cliam
         wheels.move(new RangeDistance(new Distance(24, INCH),rangeSensorFront, false), FORWARDS);
+
         //TODO: Claim depot
+
+
+
 
         //Robot moves to Crater and parks
         wheels.move(new Condition() {
@@ -126,6 +135,9 @@ public abstract class BaseAutonomous extends LinearOpMode implements OpModeInter
         getMotor("rightMotor").setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         getMotor("leftMotor").setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         getMotor("rightMotor").setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        flickerServo = getServo("flickerServo");
+
+        flickerServo.setPosition(SERVO_START);
         gyroSensor = new I2cGyroSensor((I2cDevice) get("gyroSensor"));
         gyroSensor.calibrate();
         telemetry.addData("Calibrating", "");
@@ -147,6 +159,9 @@ public abstract class BaseAutonomous extends LinearOpMode implements OpModeInter
     }
 
 
+    protected void flick() {
+        flickerServo.setPosition(SERVO_END);
+    }
 
 
     @Override
