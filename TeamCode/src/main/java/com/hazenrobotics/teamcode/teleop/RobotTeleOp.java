@@ -26,14 +26,11 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     //Add Motors, Servos, Sensors, etc here
     protected TwoWheels wheels;
     protected DrivingController driving;
-    protected DualPulleyLiftController liftController;
-    protected DualPulleyLift lift;
+    protected DcMotor extendingMotor, retractingMotor;
 
 
     //Add all Constants here
     //EX: protected final double MOTOR_POWER = 0.5;
-    protected static final float SLIDE_SPEED = 0.5f;
-    protected static final float LIFT_SLOW_MOTOR = 1f;
     
     @Override
     public void runOpMode() {
@@ -46,26 +43,29 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
 
         waitForStart();
 
-
-
         while (opModeIsActive()) {
             buttons.update();
             telemetry.addData("Started","");
             telemetry.update();
             driving.updateMotion();
-            liftController.updateMotion();
+            extendingMotor.setPower(-gamepad2.left_stick_y);
+            retractingMotor.setPower(-gamepad2.right_stick_y);
             idle();
         }
+        extendingMotor.setPower(0);
+        retractingMotor.setPower(0);
     }
     
     protected void setupHardware() {
         //Initializes the motor/servo variables here
         wheels = new TwoWheels(this, new TwoWheels.WheelConfiguration("leftMotor","rightMotor",DcMotorSimple.Direction.REVERSE, DcMotorSimple.Direction.FORWARD));
         driving = new TankControlsDrivingController(wheels, gamepad1);
-        lift = new DualPulleyLift(this, "extendingMotor","retractingMotor", SLIDE_SPEED, LIFT_SLOW_MOTOR);
-        liftController = new DualPulleyLiftController(lift,gamepad2, SLIDE_SPEED);
+        extendingMotor = hardwareMap.dcMotor.get("extendingMotor");
+        retractingMotor = hardwareMap.dcMotor.get("retractingMotor");
+        extendingMotor.setDirection(DcMotor.Direction.FORWARD);
+        retractingMotor.setDirection(DcMotor.Direction.REVERSE);
     }
-    
+        
     protected void setupButtons() {
         buttons = new ButtonManager();
     }
