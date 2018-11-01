@@ -29,80 +29,27 @@ import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.*
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public class DepotSimpleAutonomous extends LinearOpMode implements OpModeInterface {
+public class LandingAutonomous extends LinearOpMode implements OpModeInterface {
 
-    protected I2cRangeSensor rangeSensor;
-    protected I2cColorSensor colorSensorBottom;
-    protected TwoEncoderWheels wheels;
     protected DualPulleyLift lift;
-    protected Servo flickerServo;
+    protected TwoEncoderWheels wheels;
 
-    protected final static double SERVO_START = 40;
-    protected final static double SERVO_END = 0;
-
-    @Override
     public void runOpMode() {
         setupHardware();
 
         waitForStart();
 
-        land();
-
-        //TURN??
-        wheels.turn(new Angle(180, DEGREES), CLOCKWISE);
-
-        wheels.move(new RangeDistance(new Distance((float) (12 * 2 * Math.sqrt(2)), INCH), rangeSensor, false), BACKWARDS);
-    }
-
-
-
-    protected void land() {
-        Condition alternative = new Condition() {
-            NamedColorList colorList = getColorList();
-            private NamedColorList getColorList() {
-                NamedColorList list = new NamedColorList();
-                list.addColor(SensorColor.LIME);
-                list.addColor(SensorColor.LEMON);
-                list.addColor(SensorColor.YELLOW);
-                list.addColor(SensorColor.ORANGE);
-                return list;
-            }
-
-            @Override
-            protected boolean condition() {
-                return colorList.contains(colorSensorBottom.getColor());
-            }
-        };
 
         lift.slide(new Timer(2500), DualPulleyLift.Direction.EXTEND);
         wheels.move(new Timer(3000), BACKWARDS);
         lift.slide(new Timer(2500), DualPulleyLift.Direction.RETRACT);
-    }
 
-    protected void flick() {
-        flickerServo.setPosition(SERVO_END);
-        flickerServo.setPosition(SERVO_START);
-    }
+        }
+
+
+
 
     protected void setupHardware() {
-        rangeSensor = new I2cRangeSensor((I2cDevice) get("rangeSensor"));
-        colorSensorBottom = new I2cColorSensor((I2cDevice) get("colorSensorBottom"));
-
-        TwoWheels.WheelConfiguration wheelConfiguration = new TwoWheels.WheelConfiguration(
-                "leftMotor", //left name
-                "rightMotor",  //right name
-                DcMotor.Direction.FORWARD,  //left direction
-                DcMotor.Direction.REVERSE); //right direction
-        TwoEncoderWheels.EncoderConfiguration encoderConfiguration = new TwoEncoderWheels.EncoderConfiguration(
-                1680, //counts per revolution
-                new Distance(101.06f, MM), //wheel diameter
-                new Distance(37.3f, CM)); //robot diameter
-        TwoWheels.SpeedSettings speeds = new TwoWheels.SpeedSettings(
-                1f, //move speed
-                0.5f, //curve speed
-                0.7f); //turn speed
-        wheels = new TwoEncoderWheels(this, wheelConfiguration, encoderConfiguration, speeds);
-
         lift = new DualPulleyLift(this,
                 "extendingMotor", //Extending name
                 "retractingMotor", //Retracting name
