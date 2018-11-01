@@ -10,6 +10,8 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 //basic idea
 @Disabled
 @TeleOp(name = "LiftTest",group = "TeleOp")
@@ -72,5 +74,10 @@ public class LiftTele extends LinearOpMode implements OpModeInterface {
     @Override
     public HardwareDevice get(String name) {
         return null;
+    }
+
+    @Override
+    public Telemetry getTelemetry() {
+        return telemetry;
     }
 }

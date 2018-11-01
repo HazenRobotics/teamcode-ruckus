@@ -2,6 +2,8 @@ package com.hazenrobotics.teamcode.teleop;
 
 import com.hazenrobotics.commoncode.input.ButtonManager;
 import com.hazenrobotics.commoncode.interfaces.OpModeInterface;
+import com.hazenrobotics.teamcode.DualPulleyLift;
+import com.hazenrobotics.teamcode.DualPulleyLiftController;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -10,15 +12,16 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 @TeleOp(name="TeleOp", group="TeleOp")
 public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     //Add all global objects and lists
     protected ButtonManager buttons = new ButtonManager();
 
     //Add Motors, Servos, Sensors, etc here
-
-    protected DcMotor lift1,lift2;
-
+    protected DualPulleyLiftController liftController;
+    protected DualPulleyLift lift;
 
     //Add all Constants here
     //EX: protected final double MOTOR_POWER = 0.5;
@@ -33,17 +36,14 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
 
         while (opModeIsActive()) {
             buttons.update();
-
-            lift1.setPower(gamepad2.right_stick_y);
-            lift2.setPower(gamepad2.left_stick_y);
-
+            liftController.updateMotion();
             telemetry.update();
             idle();
         }
     }
     protected void setupHardware() {
-        lift1 = getMotor("lift1");
-        lift2 = getMotor("lift2");
+        lift = new DualPulleyLift(this,"pulley",1f);
+        liftController = new DualPulleyLiftController(lift,gamepad2,1f);
     }
 
     protected void setupButtons() {
@@ -78,5 +78,10 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     @Override
     public HardwareDevice get(String name) {
         return hardwareMap.get(name);
+    }
+
+    @Override
+    public Telemetry getTelemetry() {
+        return telemetry;
     }
 }

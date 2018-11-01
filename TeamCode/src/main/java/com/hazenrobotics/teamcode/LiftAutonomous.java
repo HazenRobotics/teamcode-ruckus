@@ -12,6 +12,8 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 //basic idea
 @Autonomous(name="LiftAutonomous",group="Autonomous")
 public class LiftAutonomous extends LinearOpMode implements OpModeInterface {
@@ -29,7 +31,7 @@ public class LiftAutonomous extends LinearOpMode implements OpModeInterface {
     }
 
     public void setupHardware(){
-        lift = new DualPulleyLift(this, "lift1", "lift2", 0.5f);
+        lift = new DualPulleyLift(this, "pulley", 0.5f);
     }
 
     @Override
@@ -60,5 +62,10 @@ public class LiftAutonomous extends LinearOpMode implements OpModeInterface {
     @Override
     public HardwareDevice get(String name) {
         return hardwareMap.get(name);
+    }
+
+    @Override
+    public Telemetry getTelemetry() {
+        return telemetry;
     }
 }

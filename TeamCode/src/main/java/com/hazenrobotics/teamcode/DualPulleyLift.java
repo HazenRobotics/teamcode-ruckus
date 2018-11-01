@@ -8,22 +8,18 @@ public class DualPulleyLift {
     protected OpModeInterface opModeInterface;
 
     //Motor on the lift that has the mechanical ability to move the lift extension upwards
-    protected DcMotor extendingMotor;
-    //Motor on the lift that has the mechanical ability to close the lift (an theoretically pulling the robot up with it)
-    protected DcMotor retractingMotor;
+    protected DcMotor pulleyMotor;
 
     public final float slideSpeed;
 
     protected static final Coefficients ZEROED_COEFFICIENTS = new Coefficients(0f, 0f);
 
-    public DualPulleyLift(OpModeInterface opModeInterface, String extendingMotorName, String retractingMotorName, float slideSpeed) {
+    public DualPulleyLift(OpModeInterface opModeInterface, String pulleyMotorName, float slideSpeed) {
         this.opModeInterface = opModeInterface;
 
-        extendingMotor = opModeInterface.getMotor(extendingMotorName);
-        retractingMotor = opModeInterface.getMotor(retractingMotorName);
+        pulleyMotor = opModeInterface.getMotor(pulleyMotorName);
 
-        extendingMotor.setDirection(DcMotor.Direction.FORWARD);
-        extendingMotor.setDirection(DcMotor.Direction.FORWARD);
+        pulleyMotor.setDirection(DcMotor.Direction.FORWARD);
         this.slideSpeed = slideSpeed;
     }
 
@@ -53,8 +49,7 @@ public class DualPulleyLift {
     }
 
     public void setPower(Coefficients coefficients, float speed) {
-        extendingMotor.setPower(coefficients.extending * speed);
-        retractingMotor.setPower(coefficients.retracting * speed);
+        pulleyMotor.setPower(coefficients.extending * speed);
     }
 
     public void stop() {

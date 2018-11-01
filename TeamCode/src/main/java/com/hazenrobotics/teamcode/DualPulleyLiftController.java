@@ -18,13 +18,8 @@ public class DualPulleyLiftController {
     }
 
     public void updateMotion() {
-        float movement = -controller.left_stick_y;
 
-        //The controller stick being pushed up (positive movement values) will set the direction to extending
-        DualPulleyLift.Direction direction = movement > 0 ? DualPulleyLift.Direction.EXTEND : DualPulleyLift.Direction.RETRACT;
-        float speed = Math.abs(movement) * maxSpeed;
-
-        lift.setPower(lift.calculateSlide(direction), speed);
+        lift.pulleyMotor.setPower(-controller.right_stick_y);
     }
 
     public void stopMotion() {
