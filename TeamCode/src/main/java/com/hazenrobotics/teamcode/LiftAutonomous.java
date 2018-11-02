@@ -15,7 +15,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 //basic idea
-@Autonomous(name="LiftAutonomous",group="Autonomous")
 public class LiftAutonomous extends LinearOpMode implements OpModeInterface {
     protected DualPulleyLift lift;
 

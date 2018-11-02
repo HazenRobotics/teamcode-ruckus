@@ -49,9 +49,9 @@ public class DepotSimpleAutonomous extends LinearOpMode implements OpModeInterfa
         land();
 
         //TURN??
-        wheels.turn(new Angle(180, DEGREES), CLOCKWISE);
 
         wheels.move(new RangeDistance(new Distance((float) (12 * 2 * Math.sqrt(2)), INCH), rangeSensor, false), BACKWARDS);
+        wheels.turn(new Angle(180, DEGREES), CLOCKWISE);
     }
 
 

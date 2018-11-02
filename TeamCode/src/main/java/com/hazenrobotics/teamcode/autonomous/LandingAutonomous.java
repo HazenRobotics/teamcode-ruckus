@@ -13,8 +13,10 @@ import com.hazenrobotics.commoncode.movement.TwoWheels;
 import com.hazenrobotics.commoncode.sensors.I2cColorSensor;
 import com.hazenrobotics.commoncode.sensors.I2cRangeSensor;
 import com.hazenrobotics.teamcode.DualPulleyLift;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
@@ -28,7 +30,7 @@ import static com.hazenrobotics.commoncode.models.angles.directions.SimpleDirect
 import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.*;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-
+@Autonomous(name="LandingAutonomous",group="Autonomous")
 public class LandingAutonomous extends LinearOpMode implements OpModeInterface {
 
     protected DualPulleyLift lift;
@@ -41,10 +43,11 @@ public class LandingAutonomous extends LinearOpMode implements OpModeInterface {
 
 
         lift.slide(new Timer(2500), DualPulleyLift.Direction.EXTEND);
-        wheels.move(new Timer(3000), BACKWARDS);
-        lift.slide(new Timer(2500), DualPulleyLift.Direction.RETRACT);
+        wheels.move(new Timer(1500), BACKWARDS);
+        //lift.slide(new Timer(2500), DualPulleyLift.Direction.RETRACT);
 
-        }
+
+    }
 
 
 
@@ -54,6 +57,20 @@ public class LandingAutonomous extends LinearOpMode implements OpModeInterface {
                 "extendingMotor", //Extending name
                 "retractingMotor", //Retracting name
                 1.0f); //Speed
+        TwoWheels.WheelConfiguration wheelConfiguration = new TwoWheels.WheelConfiguration(
+                "leftMotor", //left name
+                "rightMotor",  //right name
+                DcMotor.Direction.REVERSE,  //left direction
+                DcMotor.Direction.FORWARD); //right direction
+        TwoEncoderWheels.EncoderConfiguration encoderConfiguration = new TwoEncoderWheels.EncoderConfiguration(
+                1680, //counts per revolution
+                new Distance(101.06f, MM), //wheel diameter
+                new Distance(37.3f, CM)); //robot diameter
+        TwoWheels.SpeedSettings speeds = new TwoWheels.SpeedSettings(
+                1f, //move speed
+                0.5f, //curve speed
+                0.7f); //turn speed
+        wheels = new TwoEncoderWheels(this, wheelConfiguration, encoderConfiguration, speeds);
     }
 
     @Override
