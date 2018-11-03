@@ -1,26 +1,17 @@
 package com.hazenrobotics.teamcode.autonomous;
 
 import com.hazenrobotics.commoncode.interfaces.OpModeInterface;
-import com.hazenrobotics.commoncode.models.angles.Angle;
-import com.hazenrobotics.commoncode.models.colors.NamedColorList;
-import com.hazenrobotics.commoncode.models.colors.SensorColor;
-import com.hazenrobotics.commoncode.models.conditions.Condition;
-import com.hazenrobotics.commoncode.models.conditions.RangeDistance;
 import com.hazenrobotics.commoncode.models.conditions.Timer;
 import com.hazenrobotics.commoncode.models.distances.Distance;
 import com.hazenrobotics.commoncode.movement.TwoEncoderWheels;
 import com.hazenrobotics.commoncode.movement.TwoWheels;
-import com.hazenrobotics.commoncode.sensors.I2cColorSensor;
-import com.hazenrobotics.commoncode.sensors.I2cRangeSensor;
 import com.hazenrobotics.teamcode.DualPulleyLift;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
-import com.qualcomm.robotcore.hardware.I2cDevice;
 import com.qualcomm.robotcore.hardware.Servo;
 
 //Static Imports for different Units
@@ -44,9 +35,6 @@ public class LandingAutonomous extends LinearOpMode implements OpModeInterface {
 
         lift.slide(new Timer(2500), DualPulleyLift.Direction.EXTEND);
         wheels.move(new Timer(1500), BACKWARDS);
-        //lift.slide(new Timer(2500), DualPulleyLift.Direction.RETRACT);
-
-
     }
 
 

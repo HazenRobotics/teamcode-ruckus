@@ -1,12 +1,11 @@
 package com.hazenrobotics.teamcode.teleop;
 
 import com.hazenrobotics.commoncode.input.ButtonManager;
+import com.hazenrobotics.commoncode.input.Toggle;
 import com.hazenrobotics.commoncode.interfaces.OpModeInterface;
 import com.hazenrobotics.commoncode.movement.DrivingController;
 import com.hazenrobotics.commoncode.movement.TankControlsDrivingController;
 import com.hazenrobotics.commoncode.movement.TwoWheels;
-import com.hazenrobotics.teamcode.DualPulleyLift;
-import com.hazenrobotics.teamcode.DualPulleyLiftController;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -27,10 +26,11 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     protected TwoWheels wheels;
     protected DrivingController driving;
     protected DcMotor extendingMotor, retractingMotor;
-
+    protected Servo flicker;
 
     //Add all Constants here
-    //EX: protected final double MOTOR_POWER = 0.5;
+    protected final static double SERVO_START = 0.4;
+    protected final static double SERVO_END = 0;
     
     @Override
     public void runOpMode() {
@@ -60,14 +60,32 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
         //Initializes the motor/servo variables here
         wheels = new TwoWheels(this, new TwoWheels.WheelConfiguration("leftMotor","rightMotor",DcMotorSimple.Direction.REVERSE, DcMotorSimple.Direction.FORWARD));
         driving = new TankControlsDrivingController(wheels, gamepad1);
-        extendingMotor = hardwareMap.dcMotor.get("extendingMotor");
-        retractingMotor = hardwareMap.dcMotor.get("retractingMotor");
+        extendingMotor = getMotor("extendingMotor");
+        retractingMotor = getMotor("retractingMotor");
         extendingMotor.setDirection(DcMotor.Direction.FORWARD);
         retractingMotor.setDirection(DcMotor.Direction.REVERSE);
+        flicker = getServo("flickServo");
+        flicker.setPosition(SERVO_START);
     }
         
     protected void setupButtons() {
         buttons = new ButtonManager();
+        buttons.add(new Toggle() {
+            @Override
+            public void onActivate() {
+                flicker.setPosition(SERVO_END);
+            }
+
+            @Override
+            public void onDeactivate() {
+                flicker.setPosition(SERVO_START);
+            }
+
+            @Override
+            public boolean isInputPressed() {
+                return gamepad2.a;
+            }
+        });
     }
 
     @Override

@@ -13,6 +13,7 @@ import com.hazenrobotics.commoncode.movement.TwoWheels;
 import com.hazenrobotics.commoncode.sensors.I2cColorSensor;
 import com.hazenrobotics.commoncode.sensors.I2cRangeSensor;
 import com.hazenrobotics.teamcode.DualPulleyLift;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -28,7 +29,7 @@ import static com.hazenrobotics.commoncode.models.angles.directions.SimpleDirect
 import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.*;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-
+@Autonomous(name = "DepotAutonomous", group = "Autonomous")
 public class DepotSimpleAutonomous extends LinearOpMode implements OpModeInterface {
 
     protected I2cRangeSensor rangeSensor;
@@ -37,7 +38,7 @@ public class DepotSimpleAutonomous extends LinearOpMode implements OpModeInterfa
     protected DualPulleyLift lift;
     protected Servo flickerServo;
 
-    protected final static double SERVO_START = 40;
+    protected final static double SERVO_START = 0.4;
     protected final static double SERVO_END = 0;
 
     @Override
@@ -48,35 +49,19 @@ public class DepotSimpleAutonomous extends LinearOpMode implements OpModeInterfa
 
         land();
 
-        //TURN??
 
-        wheels.move(new RangeDistance(new Distance((float) (12 * 2 * Math.sqrt(2)), INCH), rangeSensor, false), BACKWARDS);
         wheels.turn(new Angle(180, DEGREES), CLOCKWISE);
+        wheels.move(new RangeDistance(new Distance(12 * 2, INCH), rangeSensor, false), FORWARDS);
+
+        flick();
     }
 
 
 
     protected void land() {
-        Condition alternative = new Condition() {
-            NamedColorList colorList = getColorList();
-            private NamedColorList getColorList() {
-                NamedColorList list = new NamedColorList();
-                list.addColor(SensorColor.LIME);
-                list.addColor(SensorColor.LEMON);
-                list.addColor(SensorColor.YELLOW);
-                list.addColor(SensorColor.ORANGE);
-                return list;
-            }
-
-            @Override
-            protected boolean condition() {
-                return colorList.contains(colorSensorBottom.getColor());
-            }
-        };
 
         lift.slide(new Timer(2500), DualPulleyLift.Direction.EXTEND);
         wheels.move(new Timer(3000), BACKWARDS);
-        lift.slide(new Timer(2500), DualPulleyLift.Direction.RETRACT);
     }
 
     protected void flick() {
