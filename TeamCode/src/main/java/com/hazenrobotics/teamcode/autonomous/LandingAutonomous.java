@@ -34,11 +34,8 @@ public class LandingAutonomous extends LinearOpMode implements OpModeInterface {
 
 
         lift.slide(new Timer(2500), DualPulleyLift.Direction.EXTEND);
-        wheels.move(new Timer(1500), BACKWARDS);
+        wheels.move(new Timer(2000), BACKWARDS);
     }
-
-
-
 
     protected void setupHardware() {
         lift = new DualPulleyLift(this,
