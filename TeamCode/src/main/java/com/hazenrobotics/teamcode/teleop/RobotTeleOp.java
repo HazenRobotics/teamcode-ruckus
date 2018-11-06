@@ -14,6 +14,8 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 @TeleOp(name="TeleOp", group="TeleOp")
 @Disabled
 public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
@@ -38,7 +40,6 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
         while (opModeIsActive()) {
             buttons.update();
 
-            driving.updateMotion();
 
 
             telemetry.update();
@@ -46,9 +47,6 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
         }
     }
     protected void setupHardware() {
-        //Initializes the motor/servo variables here
-        wheels = new TwoWheels(this, "leftMotor","rightMotor");
-        driving = new TankControlsDrivingController(wheels, gamepad1);
     }
 
     protected void setupButtons() {
@@ -83,5 +81,10 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     @Override
     public HardwareDevice get(String name) {
         return hardwareMap.get(name);
+    }
+
+    @Override
+    public Telemetry getTelemetry() {
+        return telemetry;
     }
 }
