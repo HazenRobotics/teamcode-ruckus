@@ -29,7 +29,7 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     protected Servo flicker;
 
     //Add all Constants here
-    protected final static double SERVO_START = 0.4;
+    protected final static double SERVO_START = 1.0;
     protected final static double SERVO_END = 0;
     
     @Override
@@ -54,6 +54,7 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
         }
         extendingMotor.setPower(0);
         retractingMotor.setPower(0);
+        flicker.setPosition(SERVO_START);
     }
     
     protected void setupHardware() {
@@ -64,7 +65,7 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
         retractingMotor = getMotor("retractingMotor");
         extendingMotor.setDirection(DcMotor.Direction.FORWARD);
         retractingMotor.setDirection(DcMotor.Direction.REVERSE);
-        flicker = getServo("flickServo");
+        flicker = getServo("flickerServo");
         flicker.setPosition(SERVO_START);
     }
         
