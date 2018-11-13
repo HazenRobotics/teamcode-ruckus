@@ -11,11 +11,12 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-@TeleOp(name = "ArmHingeSweeperTest", group = "Test")
-public class ArmHingeSweeperTest extends LinearOpMode implements OpModeInterface {
+@TeleOp(name = "Arm-Hinge-Axel-Sweeper Test", group = "Test")
+public class ArmHingeAxelSweeperTest extends LinearOpMode implements OpModeInterface {
     //Motors
     protected DcMotor armMotor;
     protected DcMotor hingeMotor;
+    protected DcMotor axelMotor;
     protected DcMotor sweeperMotor;
     //Constants
     protected static final double speed = 1;
@@ -27,11 +28,13 @@ public class ArmHingeSweeperTest extends LinearOpMode implements OpModeInterface
         while(opModeIsActive()){
             Arm();
             Hinge();
+            Axel();
             Sweeper();
             idle();
         }
         armMotor.setPower(0);
         hingeMotor.setPower(0);
+        axelMotor.setPower(0);
         sweeperMotor.setPower(0);
     }
 
@@ -39,9 +42,11 @@ public class ArmHingeSweeperTest extends LinearOpMode implements OpModeInterface
         //initializes motor variables
         armMotor = getMotor("armMotor");
         hingeMotor = getMotor("hingeMotor");
+        axelMotor = getMotor("axelMotor");
         sweeperMotor = getMotor("sweeperMotor");
         armMotor.setDirection(DcMotor.Direction.FORWARD);
         hingeMotor.setDirection(DcMotor.Direction.FORWARD);
+        axelMotor.setDirection(DcMotor.Direction.FORWARD);
         sweeperMotor.setDirection(DcMotor.Direction.FORWARD);
     }
 
@@ -68,6 +73,19 @@ public class ArmHingeSweeperTest extends LinearOpMode implements OpModeInterface
             hingeMotor.setPower(0);
         }
     }
+
+    //Method to pivot bucket. Uses b and x buttons.
+    protected void Axel(){
+        //B lifts bucket up, X lowers bucket down.
+        if(gamepad2.b){
+            hingeMotor.setPower(speed);
+        }else if(gamepad2.x){
+            hingeMotor.setPower(-speed);
+        }else{
+            hingeMotor.setPower(0);
+        }
+    }
+
 
     //Method to rotate sweeper. Uses bumpers.
     protected void Sweeper(){
