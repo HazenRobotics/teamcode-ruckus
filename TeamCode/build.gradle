@@ -37,7 +37,7 @@ android {
                 abiFilters "armeabi-v7a"
             }
 
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             useProguard false
         }
@@ -62,6 +62,6 @@ dependencies {
     implementation "org.first.ftc:hardware:$ftc_version"
 
     //Hazen Robotics Common Code
-    implementation 'com.github.HazenRobotics:common-code-library:1.0.0'
+    implementation 'com.github.HazenRobotics:common-code-library:a24525e904'
 }
 
