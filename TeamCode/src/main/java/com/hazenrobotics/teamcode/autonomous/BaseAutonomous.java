@@ -18,6 +18,8 @@ import com.hazenrobotics.commoncode.movement.TwoWheels;
 import com.hazenrobotics.commoncode.sensors.I2cColorSensor;
 import com.hazenrobotics.commoncode.sensors.I2cGyroSensor;
 import com.hazenrobotics.commoncode.sensors.I2cRangeSensor;
+import com.hazenrobotics.teamcode.testcode.InterfaceGyro;
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorImpl;
@@ -92,6 +94,7 @@ public abstract class BaseAutonomous extends LinearOpMode implements OpModeInter
 
             @Override
             protected boolean condition() {
+                telemetry.addData("Color", colorSensorSide.getColor());
                 return colorList.contains(colorSensorSide.getColor());
             }
 
@@ -100,8 +103,10 @@ public abstract class BaseAutonomous extends LinearOpMode implements OpModeInter
         wheels.turn(new Angle(360, DEGREES), CLOCKWISE);
 
         //Robot moves towards the wall, then turns to go to Depot
-        wheels.move(new RangeDistance(DISTANCE_FROM_RIGHT_WALL, rangeSensorFront, false), FORWARDS);
-        wheels.turn(new GyroAngle(angleToDepot, gyroSensor, CLOCKWISE), CLOCKWISE);
+        //wheels.move(new RangeDistance(DISTANCE_FROM_RIGHT_WALL, rangeSensorFront, false), FORWARDS);
+        //wheels.turn(angleToDepot, CLOCKWISE);
+
+                //new GyroAngle(angleToDepot, gyroSensor, CLOCKWISE), CLOCKWISE);
     }
     protected void claimDepotAndPark() {
 
@@ -126,13 +131,13 @@ public abstract class BaseAutonomous extends LinearOpMode implements OpModeInter
         getMotor("rightMotor").setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         getMotor("leftMotor").setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         getMotor("rightMotor").setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        gyroSensor = new I2cGyroSensor((I2cDevice) get("gyroSensor"));
-        gyroSensor.calibrate();
+        //gyroSensor = new InterfaceGyro((ModernRoboticsI2cGyro)hardwareMap.gyroSensor.get("gyroSensor"));
+        //gyroSensor.calibrate();
         telemetry.addData("Calibrating", "");
         telemetry.update();
         /*while (gyroSensor.isCalibrating()) {
             idle();
-        }*/
+        } */
         telemetry.update();
 
         TwoWheels.WheelConfiguration wheelConfiguration = new TwoWheels.WheelConfiguration("leftMotor", "rightMotor", DcMotor.Direction.FORWARD, DcMotor.Direction.REVERSE);
