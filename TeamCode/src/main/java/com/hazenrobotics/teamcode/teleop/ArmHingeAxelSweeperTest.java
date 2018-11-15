@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+//Test program intended to move all 4 motors on the arm mechanism.
 @TeleOp(name = "Arm-Hinge-Axel-Sweeper Test", group = "Test")
 public class ArmHingeAxelSweeperTest extends LinearOpMode implements OpModeInterface {
     //Motors
@@ -19,7 +20,7 @@ public class ArmHingeAxelSweeperTest extends LinearOpMode implements OpModeInter
     protected DcMotor axelMotor;
     protected DcMotor sweeperMotor;
     //Constants
-    protected static final double speed = 1;
+    protected static final double SPEED = 0.5;
 
     @Override
     public void runOpMode(){
@@ -54,9 +55,9 @@ public class ArmHingeAxelSweeperTest extends LinearOpMode implements OpModeInter
     protected void Arm(){
         //Right trigger extends, left trigger retracts.
         if(gamepad2.right_trigger>=0.05){
-            armMotor.setPower(gamepad2.right_trigger);
+            armMotor.setPower(gamepad2.right_trigger*SPEED);
         }else if(gamepad2.left_trigger>=0.05){
-            armMotor.setPower(gamepad2.left_trigger);
+            armMotor.setPower(-gamepad2.left_trigger*SPEED);
         }else{
             armMotor.setPower(0);
         }
@@ -66,9 +67,9 @@ public class ArmHingeAxelSweeperTest extends LinearOpMode implements OpModeInter
     protected void Hinge(){
         //Y lifts arm up, A lowers arm down.
         if(gamepad2.y){
-            hingeMotor.setPower(speed);
+            hingeMotor.setPower(SPEED);
         }else if(gamepad2.a){
-            hingeMotor.setPower(-speed);
+            hingeMotor.setPower(-SPEED);
         }else{
             hingeMotor.setPower(0);
         }
@@ -78,9 +79,9 @@ public class ArmHingeAxelSweeperTest extends LinearOpMode implements OpModeInter
     protected void Axel(){
         //B lifts bucket up, X lowers bucket down.
         if(gamepad2.b){
-            hingeMotor.setPower(speed);
+            hingeMotor.setPower(SPEED);
         }else if(gamepad2.x){
-            hingeMotor.setPower(-speed);
+            hingeMotor.setPower(-SPEED);
         }else{
             hingeMotor.setPower(0);
         }
@@ -91,9 +92,9 @@ public class ArmHingeAxelSweeperTest extends LinearOpMode implements OpModeInter
     protected void Sweeper(){
         //Right bumper sweeps things into scoop, left bumper spits stuff out.
         if(gamepad2.right_bumper){
-            sweeperMotor.setPower(speed);
+            sweeperMotor.setPower(SPEED);
         }else if(gamepad2.left_bumper){
-            sweeperMotor.setPower(-speed);
+            sweeperMotor.setPower(-SPEED);
         }else{
             sweeperMotor.setPower(0);
         }
