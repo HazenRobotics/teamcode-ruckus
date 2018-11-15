@@ -92,9 +92,9 @@ public class ArmHingeAxelSweeperTest extends LinearOpMode implements OpModeInter
     protected void Sweeper(){
         //Right bumper sweeps things into scoop, left bumper spits stuff out.
         if(gamepad2.right_bumper){
-            sweeperMotor.setPower(SPEED);
-        }else if(gamepad2.left_bumper){
             sweeperMotor.setPower(-SPEED);
+        }else if(gamepad2.left_bumper){
+            sweeperMotor.setPower(SPEED);
         }else{
             sweeperMotor.setPower(0);
         }
