@@ -1,1 +1,15 @@
 include ':TeamCode'
+
+Properties properties = new Properties()
+properties.load(new FileInputStream(file('./local.properties')))
+if (properties.getProperty('useLocalCommonCode') != null) {
+    useLocalCommonCode = properties.getProperty('useLocalCommonCode')
+}
+if (properties.getProperty('localCommonCodeDir') != null) {
+    localCommonCodeDir = properties.getProperty('localCommonCodeDir')
+}
+
+if (useLocalCommonCode.toBoolean()) {
+    include ":CommonCode"
+    project(":CommonCode").projectDir = file(localCommonCodeDir)
+}
