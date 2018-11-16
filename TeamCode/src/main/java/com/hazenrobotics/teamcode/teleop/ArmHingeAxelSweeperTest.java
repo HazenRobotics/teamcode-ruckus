@@ -79,11 +79,11 @@ public class ArmHingeAxelSweeperTest extends LinearOpMode implements OpModeInter
     protected void Axel(){
         //B lifts bucket up, X lowers bucket down.
         if(gamepad2.b){
-            hingeMotor.setPower(SPEED);
+            axelMotor.setPower(SPEED);
         }else if(gamepad2.x){
-            hingeMotor.setPower(-SPEED);
+            axelMotor.setPower(-SPEED);
         }else{
-            hingeMotor.setPower(0);
+            axelMotor.setPower(0);
         }
     }
 
