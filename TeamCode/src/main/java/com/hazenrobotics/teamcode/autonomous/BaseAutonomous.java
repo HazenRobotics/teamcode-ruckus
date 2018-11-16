@@ -18,8 +18,6 @@ import com.hazenrobotics.commoncode.movement.TwoWheels;
 import com.hazenrobotics.commoncode.sensors.I2cColorSensor;
 import com.hazenrobotics.commoncode.sensors.I2cGyroSensor;
 import com.hazenrobotics.commoncode.sensors.I2cRangeSensor;
-import com.hazenrobotics.teamcode.testcode.InterfaceGyro;
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorImpl;
@@ -42,11 +40,15 @@ public abstract class BaseAutonomous extends LinearOpMode implements OpModeInter
 
     protected I2cRangeSensor rangeSensorFront;
     protected I2cGyroSensor gyroSensor;
+    protected Servo flickerServo;
 
     protected Angle angleToDepot;
 
     protected static final Distance DISTANCE_FROM_LEFT_WALL = new Distance(13.798f, INCH);
     protected static final Distance DISTANCE_FROM_RIGHT_WALL = new Distance(2.971f, INCH);
+
+    protected final static double SERVO_START = 40;
+    protected final static double SERVO_END = 0;
 
     public BaseAutonomous(Angle angleToDeopt) {
         this.angleToDepot = angleToDeopt;
@@ -63,6 +65,7 @@ public abstract class BaseAutonomous extends LinearOpMode implements OpModeInter
         sampleMinerals();
         claimDepotAndPark();
     }
+
 
 
     protected void landAndMove() {
@@ -94,7 +97,6 @@ public abstract class BaseAutonomous extends LinearOpMode implements OpModeInter
 
             @Override
             protected boolean condition() {
-                telemetry.addData("Color", colorSensorSide.getColor());
                 return colorList.contains(colorSensorSide.getColor());
             }
 
@@ -103,16 +105,18 @@ public abstract class BaseAutonomous extends LinearOpMode implements OpModeInter
         wheels.turn(new Angle(360, DEGREES), CLOCKWISE);
 
         //Robot moves towards the wall, then turns to go to Depot
-        //wheels.move(new RangeDistance(DISTANCE_FROM_RIGHT_WALL, rangeSensorFront, false), FORWARDS);
-        //wheels.turn(angleToDepot, CLOCKWISE);
-
-                //new GyroAngle(angleToDepot, gyroSensor, CLOCKWISE), CLOCKWISE);
+        wheels.move(new RangeDistance(DISTANCE_FROM_RIGHT_WALL, rangeSensorFront, false), FORWARDS);
+        wheels.turn(new GyroAngle(angleToDepot, gyroSensor, CLOCKWISE), CLOCKWISE);
     }
     protected void claimDepotAndPark() {
 
         //Robot moves to Depot and puts marker down to cliam
         wheels.move(new RangeDistance(new Distance(24, INCH),rangeSensorFront, false), FORWARDS);
+
         //TODO: Claim depot
+
+
+
 
         //Robot moves to Crater and parks
         wheels.move(new Condition() {
@@ -131,13 +135,16 @@ public abstract class BaseAutonomous extends LinearOpMode implements OpModeInter
         getMotor("rightMotor").setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         getMotor("leftMotor").setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         getMotor("rightMotor").setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        //gyroSensor = new InterfaceGyro((ModernRoboticsI2cGyro)hardwareMap.gyroSensor.get("gyroSensor"));
-        //gyroSensor.calibrate();
+        flickerServo = getServo("flickerServo");
+
+        flickerServo.setPosition(SERVO_START);
+        gyroSensor = new I2cGyroSensor((I2cDevice) get("gyroSensor"));
+        gyroSensor.calibrate();
         telemetry.addData("Calibrating", "");
         telemetry.update();
         /*while (gyroSensor.isCalibrating()) {
             idle();
-        } */
+        }*/
         telemetry.update();
 
         TwoWheels.WheelConfiguration wheelConfiguration = new TwoWheels.WheelConfiguration("leftMotor", "rightMotor", DcMotor.Direction.FORWARD, DcMotor.Direction.REVERSE);
@@ -152,6 +159,9 @@ public abstract class BaseAutonomous extends LinearOpMode implements OpModeInter
     }
 
 
+    protected void flick() {
+        flickerServo.setPosition(SERVO_END);
+    }
 
 
     @Override
