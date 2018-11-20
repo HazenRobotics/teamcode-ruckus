@@ -1,6 +1,5 @@
 package com.hazenrobotics.teamcode.teleop;
 
-import com.hazenrobotics.commoncode.input.ButtonManager;
 import com.hazenrobotics.commoncode.interfaces.OpModeInterface;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -92,7 +91,6 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
             axelMotor.setPower(0);
         }
     }
-
 
     //Method to rotate sweeper. Uses bumpers.
     protected void Sweeper(){
