@@ -3,11 +3,12 @@ package com.hazenrobotics.teamcode.testcode;
 import com.hazenrobotics.commoncode.models.angles.Angle;
 import com.hazenrobotics.commoncode.models.angles.AngleUnit;
 import com.hazenrobotics.commoncode.models.angles.UnnormalizedAngleUnit;
+import com.hazenrobotics.commoncode.sensors.GyroSensor;
 import com.hazenrobotics.commoncode.sensors.I2cGyroSensor;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.hardware.I2cDevice;
 
-public class InterfaceGyro {
+public class InterfaceGyro implements GyroSensor {
 
     ModernRoboticsI2cGyro internalGyro;
 

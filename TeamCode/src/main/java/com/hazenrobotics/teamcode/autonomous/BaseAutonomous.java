@@ -9,19 +9,24 @@ import static com.hazenrobotics.commoncode.models.angles.directions.SimpleDirect
 
 import com.hazenrobotics.commoncode.models.colors.NamedColorList;
 import com.hazenrobotics.commoncode.models.colors.SensorColor;
+import com.hazenrobotics.commoncode.models.conditions.ColorMatch;
 import com.hazenrobotics.commoncode.models.conditions.Condition;
 import com.hazenrobotics.commoncode.models.conditions.GyroAngle;
 import com.hazenrobotics.commoncode.models.conditions.RangeDistance;
 import com.hazenrobotics.commoncode.models.distances.Distance;
 import com.hazenrobotics.commoncode.movement.TwoEncoderWheels;
 import com.hazenrobotics.commoncode.movement.TwoWheels;
+import com.hazenrobotics.commoncode.sensors.ColorSensor;
+import com.hazenrobotics.commoncode.sensors.GyroSensor;
 import com.hazenrobotics.commoncode.sensors.I2cColorSensor;
 import com.hazenrobotics.commoncode.sensors.I2cGyroSensor;
 import com.hazenrobotics.commoncode.sensors.I2cRangeSensor;
+import com.hazenrobotics.commoncode.sensors.RangeSensor;
+
+import com.hazenrobotics.teamcode.testcode.InterfaceGyro;
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorImpl;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
@@ -35,11 +40,11 @@ import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.*
 
 public abstract class BaseAutonomous extends LinearOpMode implements OpModeInterface {
 
-    protected I2cColorSensor colorSensorSide;
-    protected I2cColorSensor colorSensorBottom;
+    protected ColorSensor<SensorColor> colorSensorSide;
+    protected ColorSensor<SensorColor> colorSensorBottom;
 
-    protected I2cRangeSensor rangeSensorFront;
-    protected I2cGyroSensor gyroSensor;
+    protected RangeSensor rangeSensorFront;
+    protected GyroSensor gyroSensor;
     protected Servo flickerServo;
 
     protected Angle angleToDepot;
@@ -50,15 +55,16 @@ public abstract class BaseAutonomous extends LinearOpMode implements OpModeInter
     protected final static double SERVO_START = 40;
     protected final static double SERVO_END = 0;
 
-    public BaseAutonomous(Angle angleToDeopt) {
-        this.angleToDepot = angleToDeopt;
+    public BaseAutonomous(Angle angleToDepot) {
+        this.angleToDepot = angleToDepot;
     }
 
     protected TwoEncoderWheels wheels;
 
     public void runOpMode() {
         setupHardware();
-
+        telemetry.addData("","Initialized");
+        telemetry.update();
         waitForStart();
 
         landAndMove();
@@ -74,12 +80,21 @@ public abstract class BaseAutonomous extends LinearOpMode implements OpModeInter
 
         //Backs up to not hit lander
         wheels.move(new Distance(3, INCH),BACKWARDS);
+
+        TwoWheels.Coefficients coefficients = wheels.calculateTurn(COUNTER_CLOCKWISE);
+        telemetry.addData("left", coefficients.left);
+        telemetry.addData("right", coefficients.right);
+        telemetry.update();
+        sleep(10000);
         //we are now FACING THE WALL!!!
-        wheels.turn(new Angle(135, DEGREES),COUNTER_CLOCKWISE);
+        wheels.runByCoefficients(new GyroAngle(new Angle(135, DEGREES), gyroSensor, COUNTER_CLOCKWISE, false), coefficients, 1f);
+
+
+        //wheels.turn(new GyroAngle(new Angle(135, DEGREES), gyroSensor, COUNTER_CLOCKWISE, false),COUNTER_CLOCKWISE);
         //Move towards wall (to line up with minerals)
         wheels.move(new RangeDistance(DISTANCE_FROM_LEFT_WALL, rangeSensorFront, false), FORWARDS);
         //Turn to be parallel with minerals
-        wheels.turn(new Angle(135, DEGREES), COUNTER_CLOCKWISE);
+        wheels.turn(new GyroAngle(new Angle(135, DEGREES), gyroSensor, COUNTER_CLOCKWISE, false), COUNTER_CLOCKWISE);
     }
 
     protected void sampleMinerals() {
@@ -102,16 +117,16 @@ public abstract class BaseAutonomous extends LinearOpMode implements OpModeInter
 
             //Turn 360 Degrees clockwise to move mineral
         }, FORWARDS);
-        wheels.turn(new Angle(360, DEGREES), CLOCKWISE);
+        wheels.turn(new GyroAngle(new Angle(360, DEGREES), gyroSensor, CLOCKWISE, false), CLOCKWISE);
 
         //Robot moves towards the wall, then turns to go to Depot
         wheels.move(new RangeDistance(DISTANCE_FROM_RIGHT_WALL, rangeSensorFront, false), FORWARDS);
-        wheels.turn(new GyroAngle(angleToDepot, gyroSensor, CLOCKWISE), CLOCKWISE);
+        wheels.turn(new GyroAngle(angleToDepot, gyroSensor, CLOCKWISE, false), CLOCKWISE);
     }
     protected void claimDepotAndPark() {
 
         //Robot moves to Depot and puts marker down to cliam
-        wheels.move(new RangeDistance(new Distance(24, INCH),rangeSensorFront, false), FORWARDS);
+        wheels.move(new RangeDistance(new Distance(24, INCH), rangeSensorFront, false), FORWARDS);
 
         //TODO: Claim depot
 
@@ -119,7 +134,8 @@ public abstract class BaseAutonomous extends LinearOpMode implements OpModeInter
 
 
         //Robot moves to Crater and parks
-        wheels.move(new Condition() {
+        wheels.move(//new ColorMatch(colorSensorBottom, SensorColor.BLACK);
+                new Condition() {
             @Override
             protected boolean condition() {
                 return colorSensorSide.getColor() == SensorColor.BLACK;
@@ -129,8 +145,8 @@ public abstract class BaseAutonomous extends LinearOpMode implements OpModeInter
 
     protected void setupHardware() {
         rangeSensorFront = new I2cRangeSensor((I2cDevice) get("rangeSensor"));
-        colorSensorBottom = new I2cColorSensor((I2cDevice) get("colorSensorBottom"), new I2cAddr(0x3a));
-        colorSensorSide = new I2cColorSensor((I2cDevice) get("colorSensorSide"), new I2cAddr(0X3c));
+        colorSensorBottom = new I2cColorSensor((I2cDevice) get("colorSensorBottom"), I2cAddr.create8bit(0x3a));
+        colorSensorSide = new I2cColorSensor((I2cDevice) get("colorSensorSide"), I2cAddr.create8bit(0X3c));
         getMotor("leftMotor").setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         getMotor("rightMotor").setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         getMotor("leftMotor").setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -138,14 +154,18 @@ public abstract class BaseAutonomous extends LinearOpMode implements OpModeInter
         flickerServo = getServo("flickerServo");
 
         flickerServo.setPosition(SERVO_START);
-        gyroSensor = new I2cGyroSensor((I2cDevice) get("gyroSensor"));
+        gyroSensor = new InterfaceGyro((ModernRoboticsI2cGyro) get("gyroSensor"));
         gyroSensor.calibrate();
-        telemetry.addData("Calibrating", "");
+        /*
+        telemetry.addData("Status:", "Calibrating");
         telemetry.update();
-        /*while (gyroSensor.isCalibrating()) {
+        while (gyroSensor.isCalibrating()) {
             idle();
-        }*/
+        }
+        telemetry.addData("Status:" "Done Calibrating");
         telemetry.update();
+        */
+
 
         TwoWheels.WheelConfiguration wheelConfiguration = new TwoWheels.WheelConfiguration("leftMotor", "rightMotor", DcMotor.Direction.FORWARD, DcMotor.Direction.REVERSE);
         TwoEncoderWheels.EncoderConfiguration encoderConfiguration = new TwoEncoderWheels.EncoderConfiguration(1680, new Distance(101.06f, MM), new Distance(37.3f, CM));

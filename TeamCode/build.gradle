@@ -62,6 +62,6 @@ dependencies {
     implementation "org.first.ftc:hardware:$ftc_version"
 
     //Hazen Robotics Common Code
-    implementation 'com.github.hazenrobotics:common-code-library:a24525e904'
+    implementation 'com.github.hazenrobotics:common-code-library:c14d0f66b7'
 }
 
