@@ -109,7 +109,7 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
 
             @Override
             public boolean isInputPressed() {
-                return gamepad2.a;
+                return gamepad1.a;
             }
         });
     }
