@@ -39,6 +39,8 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     protected DcMotor sweeperMotor;
     //Constants
     protected static final double SPEED = 0.5;
+    protected static final double LIFTPOWER = -0.3;
+    protected boolean liftLimit = false;
 
     @Override
     public void runOpMode() {
@@ -56,8 +58,7 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
             telemetry.addData("Started", "");
             telemetry.update();
             driving.updateMotion();
-            extendingMotor.setPower(-gamepad2.left_stick_y);
-            retractingMotor.setPower(-gamepad2.right_stick_y);
+            Lift();
             Arm();
             Hinge();
             Axel();
@@ -66,7 +67,7 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
         }
         extendingMotor.setPower(0);
         retractingMotor.setPower(0);
-        flicker.setPosition(SERVO_START);
+        //flicker.setPosition(SERVO_START);
         armMotor.setPower(0);
         hingeMotor.setPower(0);
         axelMotor.setPower(0);
@@ -81,8 +82,8 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
         retractingMotor = getMotor("retractingMotor");
         extendingMotor.setDirection(DcMotor.Direction.FORWARD);
         retractingMotor.setDirection(DcMotor.Direction.REVERSE);
-        flicker = getServo("flickerServo");
-        flicker.setPosition(SERVO_START);
+        //flicker = getServo("flickerServo");
+        //flicker.setPosition(SERVO_START);
         //initializes motor variables
         armMotor = getMotor("armMotor");
         hingeMotor = getMotor("hingeMotor");
@@ -112,6 +113,20 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
                 return gamepad1.a;
             }
         });
+    }
+
+    protected void Lift(){
+        if(liftLimit){
+            extendingMotor.setPower(0);
+            retractingMotor.setPower(LIFTPOWER);
+        }
+        else {
+            extendingMotor.setPower(gamepad2.left_stick_y);
+            retractingMotor.setPower(-gamepad2.right_stick_y);
+            if(gamepad1.a){
+                liftLimit = true;
+            }
+        }
     }
 
     //Method to extend and retract arm. Uses triggers.
