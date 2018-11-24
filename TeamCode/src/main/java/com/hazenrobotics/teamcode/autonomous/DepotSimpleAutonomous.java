@@ -40,6 +40,7 @@ public class DepotSimpleAutonomous extends LinearOpMode implements OpModeInterfa
     @Override
     public void runOpMode() {
         setupHardware();
+        lift.initPower(-0.3);
 
         waitForStart();
 
