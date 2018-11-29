@@ -60,6 +60,7 @@ dependencies {
     implementation "com.github.modular-ftc:robotcore-repackaged:$ftc_version.0-lite"
     implementation "com.github.modular-ftc:ftc-common-repackaged:$ftc_version.0-lite"
     implementation "org.first.ftc:hardware:$ftc_version"
+
     //Hazen Robotics Common Code
     Properties properties = new Properties()
     properties.load(new FileInputStream(file('../local.properties')))
