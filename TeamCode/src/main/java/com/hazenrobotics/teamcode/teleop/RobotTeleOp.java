@@ -39,7 +39,7 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     protected DcMotor sweeperMotor;
     //Constants
     protected static final double SPEED = 0.5;
-    protected static final double LIFTPOWER = -0.3;
+    protected static final double LIFT_POWER = -0.3;
     protected boolean liftLimit = false;
 
     @Override
@@ -118,7 +118,7 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     protected void Lift(){
         if(liftLimit){
             extendingMotor.setPower(0);
-            retractingMotor.setPower(LIFTPOWER);
+            retractingMotor.setPower(LIFT_POWER);
         }
         else {
             extendingMotor.setPower(gamepad2.left_stick_y);
