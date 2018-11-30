@@ -31,7 +31,7 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     protected DcMotor axelMotor;
     protected DcMotor sweeperMotor;
     //Constants
-    protected static final double SPEED = 0.5;
+    protected static final double SPEED = 0.3;
     protected static final double LIFT_POWER = 0.15;
     protected boolean liftLimit = false;
 
