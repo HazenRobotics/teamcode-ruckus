@@ -32,7 +32,7 @@ public class DepotSimpleAutonomous extends LinearOpMode implements OpModeInterfa
     protected I2cColorSensor colorSensorBottom;
     protected TwoEncoderWheels wheels;
     protected DualPulleyLift lift;
-    protected Servo flicker;
+    //protected Servo flicker;
 
     protected final static double SERVO_START = 1.0;
     protected final static double SERVO_END = 0;
@@ -52,7 +52,7 @@ public class DepotSimpleAutonomous extends LinearOpMode implements OpModeInterfa
         //wheels.move(new Ran geDistance(new Distance(12 * 2, INCH), rangeSensor, false), FORWARDS);
         telemetry.addData("past move", "commented out");
         telemetry.update();
-        flick();
+        //flick();
     }
 
 
@@ -64,7 +64,7 @@ public class DepotSimpleAutonomous extends LinearOpMode implements OpModeInterfa
     }
 
     protected void flick() {
-        flicker.setPosition(SERVO_END);
+        //flicker.setPosition(SERVO_END);
         sleep(1000);
     }
 
@@ -91,8 +91,8 @@ public class DepotSimpleAutonomous extends LinearOpMode implements OpModeInterfa
                 "extendingMotor", //Extending name
                 "retractingMotor", //Retracting name
                 1.0f); //Speed
-        flicker = getServo("flickerServo");
-        flicker.setPosition(SERVO_START);
+        //flicker = getServo("flickerServo");
+        //flicker.setPosition(SERVO_START);
     }
 
     @Override
