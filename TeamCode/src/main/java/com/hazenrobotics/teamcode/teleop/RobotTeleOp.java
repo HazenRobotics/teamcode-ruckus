@@ -124,9 +124,9 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     //Method to pivot bucket. Uses b and x buttons.
     protected void Axel(){
         //B lifts bucket up, X lowers bucket down.
-        if(gamepad2.b){
+        if(gamepad2.dpad_up){
             axelMotor.setPower(SPEED);
-        }else if(gamepad2.x){
+        }else if(gamepad2.dpad_down){
             axelMotor.setPower(-SPEED);
         }else{
             axelMotor.setPower(0);
