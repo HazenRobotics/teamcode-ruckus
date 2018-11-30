@@ -87,7 +87,7 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
         sweeperMotor.setDirection(DcMotor.Direction.FORWARD);
     }
 
-
+    //default: lift is controlled by gamepad 2 sticks, if y is hit, maintains power to end.
     protected void Lift(){
         if(liftLimit){
             extendingMotor.setPower(0);
@@ -96,7 +96,7 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
         else {
             extendingMotor.setPower(gamepad2.left_stick_y);
             retractingMotor.setPower(gamepad2.right_stick_y);
-            if(gamepad1.a){
+            if(gamepad1.y){
                 liftLimit = true;
             }
         }
