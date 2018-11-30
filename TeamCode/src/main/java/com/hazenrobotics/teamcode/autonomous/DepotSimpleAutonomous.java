@@ -32,11 +32,13 @@ public class DepotSimpleAutonomous extends LinearOpMode implements OpModeInterfa
     protected I2cColorSensor colorSensorBottom;
     protected TwoEncoderWheels wheels;
     protected DualPulleyLift lift;
+    protected DcMotor sweeperMotor;
     //protected Servo flicker;
 
     protected final static double SERVO_START = 1.0;
     protected final static double SERVO_END = 0;
     protected final static double LIFT_POWER = 0.15;
+    protected final static double SWEEPER_SPEED = 0.5;
 
     @Override
     public void runOpMode() {
@@ -53,6 +55,7 @@ public class DepotSimpleAutonomous extends LinearOpMode implements OpModeInterfa
         telemetry.addData("past move", "commented out");
         telemetry.update();
         //flick();
+        sweep();
     }
 
 
@@ -63,9 +66,17 @@ public class DepotSimpleAutonomous extends LinearOpMode implements OpModeInterfa
         wheels.move(new Timer(2200), BACKWARDS);
     }
 
+/*
     protected void flick() {
-        //flicker.setPosition(SERVO_END);
+        flicker.setPosition(SERVO_END);
         sleep(1000);
+    }
+*/
+
+    protected void sweep(){
+        sweeperMotor.setPower(SWEEPER_SPEED);
+        sleep(1000);
+        sweeperMotor.setPower(0);
     }
 
     protected void setupHardware() {
@@ -93,6 +104,9 @@ public class DepotSimpleAutonomous extends LinearOpMode implements OpModeInterfa
                 1.0f); //Speed
         //flicker = getServo("flickerServo");
         //flicker.setPosition(SERVO_START);
+
+        sweeperMotor = getMotor("sweeperMotor");
+        sweeperMotor.setDirection(DcMotor.Direction.FORWARD);
     }
 
     @Override
