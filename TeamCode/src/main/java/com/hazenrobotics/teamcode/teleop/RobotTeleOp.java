@@ -1,7 +1,5 @@
 package com.hazenrobotics.teamcode.teleop;
 
-import com.hazenrobotics.commoncode.input.ButtonManager;
-import com.hazenrobotics.commoncode.input.Toggle;
 import com.hazenrobotics.commoncode.interfaces.OpModeInterface;
 import com.hazenrobotics.commoncode.movement.DrivingController;
 import com.hazenrobotics.commoncode.movement.TankControlsDrivingController;
@@ -74,9 +72,6 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
         retractingMotor = getMotor("retractingMotor");
         extendingMotor.setDirection(DcMotor.Direction.FORWARD);
         retractingMotor.setDirection(DcMotor.Direction.REVERSE);
-        //flicker = getServo("flickerServo");
-        //flicker.setPosition(SERVO_START);
-        //initializes motor variables
         armMotor = getMotor("armMotor");
         hingeMotor = getMotor("hingeMotor");
         axelMotor = getMotor("axelMotor");
@@ -87,7 +82,7 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
         sweeperMotor.setDirection(DcMotor.Direction.FORWARD);
     }
 
-    //default: lift is controlled by gamepad 2 sticks, if y is hit, maintains power to end.
+    //default: lift is controlled by gamepad 2 sticks; if y is hit, maintains power to end.
     protected void Lift(){
         if(liftLimit){
             extendingMotor.setPower(0);
