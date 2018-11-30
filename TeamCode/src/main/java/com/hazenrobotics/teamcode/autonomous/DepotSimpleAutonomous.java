@@ -36,7 +36,7 @@ public class DepotSimpleAutonomous extends LinearOpMode implements OpModeInterfa
 
     protected final static double SERVO_START = 1.0;
     protected final static double SERVO_END = 0;
-    protected final static double LIFT_POWER = -0.3;
+    protected final static double LIFT_POWER = 0.15;
 
     @Override
     public void runOpMode() {

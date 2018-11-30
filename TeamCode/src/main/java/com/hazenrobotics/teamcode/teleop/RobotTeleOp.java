@@ -20,17 +20,12 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 @TeleOp(name="TeleOp", group="TeleOp")
 public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     //Add all global objects and lists
-    protected ButtonManager buttons = new ButtonManager();
 
     //Add Motors, Servos, Sensors, etc here
     protected TwoWheels wheels;
     protected DrivingController driving;
     protected DcMotor extendingMotor, retractingMotor;
-    protected Servo flicker;
 
-    //Add all Constants here
-    protected final static double SERVO_START = 1.0;
-    protected final static double SERVO_END = 0;
 
     //Motors
     protected DcMotor armMotor;
@@ -39,13 +34,12 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     protected DcMotor sweeperMotor;
     //Constants
     protected static final double SPEED = 0.5;
-    protected static final double LIFT_POWER = -0.3;
+    protected static final double LIFT_POWER = 0.15;
     protected boolean liftLimit = false;
 
     @Override
     public void runOpMode() {
         setupHardware();
-        setupButtons();
         //Add any further initialization (methods) here
 
         telemetry.addData("Inited", "");
@@ -54,7 +48,6 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
         waitForStart();
 
         while (opModeIsActive()) {
-            buttons.update();
             telemetry.addData("Started", "");
             telemetry.update();
             driving.updateMotion();
@@ -67,7 +60,6 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
         }
         extendingMotor.setPower(0);
         retractingMotor.setPower(0);
-        //flicker.setPosition(SERVO_START);
         armMotor.setPower(0);
         hingeMotor.setPower(0);
         axelMotor.setPower(0);
@@ -95,25 +87,6 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
         sweeperMotor.setDirection(DcMotor.Direction.FORWARD);
     }
 
-    protected void setupButtons() {
-        buttons = new ButtonManager();
-        buttons.add(new Toggle() {
-            @Override
-            public void onActivate() {
-                flicker.setPosition(SERVO_END);
-            }
-
-            @Override
-            public void onDeactivate() {
-                flicker.setPosition(SERVO_START);
-            }
-
-            @Override
-            public boolean isInputPressed() {
-                return gamepad1.a;
-            }
-        });
-    }
 
     protected void Lift(){
         if(liftLimit){
@@ -122,7 +95,7 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
         }
         else {
             extendingMotor.setPower(gamepad2.left_stick_y);
-            retractingMotor.setPower(-gamepad2.right_stick_y);
+            retractingMotor.setPower(gamepad2.right_stick_y);
             if(gamepad1.a){
                 liftLimit = true;
             }
