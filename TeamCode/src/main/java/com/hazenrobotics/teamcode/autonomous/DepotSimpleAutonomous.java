@@ -29,16 +29,11 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 @Autonomous(name = "Simple Autonomous", group = "Autonomous")
 public class DepotSimpleAutonomous extends LinearOpMode implements OpModeInterface {
 
-    //protected I2cRangeSensor rangeSensor;
-    //protected I2cColorSensor colorSensorBottom;
     protected TwoEncoderWheels wheels;
     protected DualPulleyLift lift;
     protected DcMotor sweeperMotor;
     protected DcMotor axelMotor;
-    //protected Servo flicker;
 
-    protected final static double SERVO_START = 1.0;
-    protected final static double SERVO_END = 0;
     protected final static double LIFT_POWER = 0.15;
     protected final static double SWEEPER_SPEED = 0.5;
 
@@ -51,12 +46,6 @@ public class DepotSimpleAutonomous extends LinearOpMode implements OpModeInterfa
 
         land();
 
-
-        //wheels.turn(new Timer(1750), CLOCKWISE);
-        //wheels.move(new Ran getDistance(new Distance(12 * 2, INCH), rangeSensor, false), FORWARDS);
-        telemetry.addData("past move", "commented out");
-        telemetry.update();
-        //flick();
         sweep();
     }
 
@@ -64,16 +53,9 @@ public class DepotSimpleAutonomous extends LinearOpMode implements OpModeInterfa
 
     protected void land() {
 
-        lift.slide(new Timer(2000), DualPulleyLift.Direction.EXTEND);
-        wheels.move(new Timer(4400), BACKWARDS);
+        lift.slide(new Timer( 2700), DualPulleyLift.Direction.EXTEND,0.5f);
+        wheels.move(new Timer(2200), BACKWARDS);
     }
-
-/*
-    protected void flick() {
-        flicker.setPosition(SERVO_END);
-        sleep(1000);
-    }
-*/
 
     protected void sweep(){
         axelMotor.setPower(-0.3);
@@ -84,9 +66,6 @@ public class DepotSimpleAutonomous extends LinearOpMode implements OpModeInterfa
     }
 
     protected void setupHardware() {
-        //rangeSensor = new I2cRangeSensor((I2cDevice) get("rangeSensor"));
-        //colorSensorBottom = new I2cColorSensor((I2cDevice) get("colorSensorBottom"));
-
         TwoWheels.WheelConfiguration wheelConfiguration = new TwoWheels.WheelConfiguration(
                 "leftMotor", //left name
                 "rightMotor",  //right name
@@ -106,8 +85,6 @@ public class DepotSimpleAutonomous extends LinearOpMode implements OpModeInterfa
                 "extendingMotor", //Extending name
                 "retractingMotor", //Retracting name
                 1.0f); //Speed
-        //flicker = getServo("flickerServo");
-        //flicker.setPosition(SERVO_START);
 
         sweeperMotor = getMotor("sweeperMotor");
         sweeperMotor.setDirection(DcMotor.Direction.FORWARD);

@@ -4,6 +4,8 @@ import com.hazenrobotics.commoncode.interfaces.OpModeInterface;
 import com.hazenrobotics.commoncode.movement.DrivingController;
 import com.hazenrobotics.commoncode.movement.TankControlsDrivingController;
 import com.hazenrobotics.commoncode.movement.TwoWheels;
+import com.hazenrobotics.teamcode.DualPulleyLift;
+import com.hazenrobotics.teamcode.DualPulleyLiftController;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -22,8 +24,8 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     //Add Motors, Servos, Sensors, etc here
     protected TwoWheels wheels;
     protected DrivingController driving;
-    protected DcMotor extendingMotor, retractingMotor;
-
+    protected DualPulleyLift lift;
+    protected DualPulleyLiftController liftController;
 
     //Motors
     protected DcMotor armMotor;
@@ -32,8 +34,6 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     protected DcMotor sweeperMotor;
     //Constants
     protected static final double SPEED = 0.3;
-    protected static final double LIFT_POWER = 0.15;
-    protected boolean liftLimit = false;
 
     @Override
     public void runOpMode() {
@@ -49,15 +49,17 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
             telemetry.addData("Started", "");
             telemetry.update();
             driving.updateMotion();
-            Lift();
+
+            liftController.updateMotion();
+
             Arm();
             Hinge();
             Axel();
             Sweeper();
             idle();
         }
-        extendingMotor.setPower(0);
-        retractingMotor.setPower(0);
+        liftController.stopMotion();
+
         armMotor.setPower(0);
         hingeMotor.setPower(0);
         axelMotor.setPower(0);
@@ -68,10 +70,10 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
         //Initializes the motor/servo variables here
         wheels = new TwoWheels(this, new TwoWheels.WheelConfiguration("leftMotor","rightMotor",DcMotorSimple.Direction.REVERSE, DcMotorSimple.Direction.FORWARD));
         driving = new TankControlsDrivingController(wheels, gamepad1);
-        extendingMotor = getMotor("extendingMotor");
-        retractingMotor = getMotor("retractingMotor");
-        extendingMotor.setDirection(DcMotor.Direction.FORWARD);
-        retractingMotor.setDirection(DcMotor.Direction.REVERSE);
+
+        lift = new DualPulleyLift(this, "extendingMotor", "retractingMotor", 1.0f);
+        liftController = new DualPulleyLiftController(lift, gamepad2, gamepad1, 1f);
+
         armMotor = getMotor("armMotor");
         hingeMotor = getMotor("hingeMotor");
         axelMotor = getMotor("axelMotor");
@@ -80,21 +82,6 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
         hingeMotor.setDirection(DcMotor.Direction.FORWARD);
         axelMotor.setDirection(DcMotor.Direction.FORWARD);
         sweeperMotor.setDirection(DcMotor.Direction.FORWARD);
-    }
-
-    //default: lift is controlled by gamepad 2 sticks; if y is hit, maintains power to end.
-    protected void Lift(){
-        if(liftLimit){
-            extendingMotor.setPower(0);
-            retractingMotor.setPower(LIFT_POWER);
-        }
-        else {
-            extendingMotor.setPower(gamepad2.left_stick_y);
-            retractingMotor.setPower(gamepad2.right_stick_y);
-            if(gamepad1.y){
-                liftLimit = true;
-            }
-        }
     }
 
     //Method to extend and retract arm. Uses triggers.

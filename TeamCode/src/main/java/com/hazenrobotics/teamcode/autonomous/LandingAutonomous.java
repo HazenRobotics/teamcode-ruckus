@@ -7,6 +7,7 @@ import com.hazenrobotics.commoncode.movement.TwoEncoderWheels;
 import com.hazenrobotics.commoncode.movement.TwoWheels;
 import com.hazenrobotics.teamcode.DualPulleyLift;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -22,6 +23,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.*
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 @Autonomous(name="LandingAutonomous",group="Autonomous")
+@Disabled
 public class LandingAutonomous extends LinearOpMode implements OpModeInterface {
 
     protected DualPulleyLift lift;
@@ -31,7 +33,6 @@ public class LandingAutonomous extends LinearOpMode implements OpModeInterface {
         setupHardware();
 
         waitForStart();
-
 
         lift.slide(new Timer(2500), DualPulleyLift.Direction.EXTEND);
         wheels.move(new Timer(2000), BACKWARDS);
