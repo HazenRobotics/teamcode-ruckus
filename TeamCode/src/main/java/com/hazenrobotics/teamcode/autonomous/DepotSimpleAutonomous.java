@@ -13,6 +13,7 @@ import com.hazenrobotics.teamcode.DualPulleyLift;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
@@ -28,11 +29,12 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 @Autonomous(name = "DepotAutonomous", group = "Autonomous")
 public class DepotSimpleAutonomous extends LinearOpMode implements OpModeInterface {
 
-    protected I2cRangeSensor rangeSensor;
-    protected I2cColorSensor colorSensorBottom;
+    //protected I2cRangeSensor rangeSensor;
+    //protected I2cColorSensor colorSensorBottom;
     protected TwoEncoderWheels wheels;
     protected DualPulleyLift lift;
     protected DcMotor sweeperMotor;
+    protected DcMotor axelMotor;
     //protected Servo flicker;
 
     protected final static double SERVO_START = 1.0;
@@ -50,8 +52,8 @@ public class DepotSimpleAutonomous extends LinearOpMode implements OpModeInterfa
         land();
 
 
-        wheels.turn(new Timer(1750    ), CLOCKWISE);
-        //wheels.move(new Ran geDistance(new Distance(12 * 2, INCH), rangeSensor, false), FORWARDS);
+        //wheels.turn(new Timer(1750), CLOCKWISE);
+        //wheels.move(new Ran getDistance(new Distance(12 * 2, INCH), rangeSensor, false), FORWARDS);
         telemetry.addData("past move", "commented out");
         telemetry.update();
         //flick();
@@ -62,8 +64,8 @@ public class DepotSimpleAutonomous extends LinearOpMode implements OpModeInterfa
 
     protected void land() {
 
-        lift.slide(new Timer(2500), DualPulleyLift.Direction.EXTEND);
-        wheels.move(new Timer(2200), BACKWARDS);
+        lift.slide(new Timer(3500), DualPulleyLift.Direction.EXTEND);
+        wheels.move(new Timer(4400), BACKWARDS);
     }
 
 /*
@@ -74,14 +76,16 @@ public class DepotSimpleAutonomous extends LinearOpMode implements OpModeInterfa
 */
 
     protected void sweep(){
+        axelMotor.setPower(-0.3);
+        sleep(500);
         sweeperMotor.setPower(SWEEPER_SPEED);
         sleep(1000);
         sweeperMotor.setPower(0);
     }
 
     protected void setupHardware() {
-        rangeSensor = new I2cRangeSensor((I2cDevice) get("rangeSensor"));
-        colorSensorBottom = new I2cColorSensor((I2cDevice) get("colorSensorBottom"));
+        //rangeSensor = new I2cRangeSensor((I2cDevice) get("rangeSensor"));
+        //colorSensorBottom = new I2cColorSensor((I2cDevice) get("colorSensorBottom"));
 
         TwoWheels.WheelConfiguration wheelConfiguration = new TwoWheels.WheelConfiguration(
                 "leftMotor", //left name
@@ -107,6 +111,8 @@ public class DepotSimpleAutonomous extends LinearOpMode implements OpModeInterfa
 
         sweeperMotor = getMotor("sweeperMotor");
         sweeperMotor.setDirection(DcMotor.Direction.FORWARD);
+        axelMotor = getMotor("axelMotor");
+        axelMotor.setDirection(DcMotor.Direction.FORWARD);
     }
 
     @Override
