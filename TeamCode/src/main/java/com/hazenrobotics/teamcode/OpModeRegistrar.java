@@ -25,10 +25,10 @@ public final class OpModeRegistrar {
     private static List<OpModeEntry> getOpModes() {
         List<OpModeEntry> list = new ArrayList<>();
 
-        list.add(new OpModeEntry("Two Wheels Debug", "Test", TELEOP, TwoWheelsDebug.class));
-        list.add(new OpModeEntry("Four Wheels Debug", "Test", TELEOP, FourWheelsDebug.class));
-        list.add(new OpModeEntry("One Motor Debug", "Test", TELEOP, MotorDebug.class));
-        list.add(new OpModeEntry("Servo Debug", "Test", TELEOP, ServoDebug.class));
+        //list.add(new OpModeEntry("Two Wheels Debug", "Test", TELEOP, TwoWheelsDebug.class));
+        //list.add(new OpModeEntry("Four Wheels Debug", "Test", TELEOP, FourWheelsDebug.class));
+        //list.add(new OpModeEntry("Motor Debug", "Test", TELEOP, MotorDebug.class));
+        //list.add(new OpModeEntry("Servo Debug", "Test", TELEOP, ServoDebug.class));
 
 
         return list;
