@@ -26,7 +26,7 @@ import static com.hazenrobotics.commoncode.models.angles.directions.SimpleDirect
 import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.*;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-@Autonomous(name = "DepotAutonomous", group = "Autonomous")
+@Autonomous(name = "Simple Autonomous", group = "Autonomous")
 public class DepotSimpleAutonomous extends LinearOpMode implements OpModeInterface {
 
     //protected I2cRangeSensor rangeSensor;
@@ -64,7 +64,7 @@ public class DepotSimpleAutonomous extends LinearOpMode implements OpModeInterfa
 
     protected void land() {
 
-        lift.slide(new Timer(3500), DualPulleyLift.Direction.EXTEND);
+        lift.slide(new Timer(2000), DualPulleyLift.Direction.EXTEND);
         wheels.move(new Timer(4400), BACKWARDS);
     }
 
