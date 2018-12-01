@@ -25,28 +25,27 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     //Add Motors, Servos, Sensors, etc here
     protected TwoWheels wheels;
     protected DrivingController driving;
-    protected DcMotor extendingMotor, retractingMotor;
-    protected Servo flicker;
+
 
     //Add all Constants here
-    protected final static double SERVO_START = 1.0;
-    protected final static double SERVO_END = 0;
-    
+    //EX: protected final double MOTOR_POWER = 0.5;
     @Override
     public void runOpMode() {
         setupHardware();
         setupButtons();
         //Add any further initialization (methods) here
 
-        telemetry.addData("Inited","");
+        telemetry.addLine("Inited");
         telemetry.update();
 
         waitForStart();
 
+        telemetry.addLine("Started");
+        telemetry.update();
+
         while (opModeIsActive()) {
             buttons.update();
-            telemetry.addData("Started","");
-            telemetry.update();
+
             driving.updateMotion();
             extendingMotor.setPower(-gamepad2.left_stick_y);
             retractingMotor.setPower(-gamepad2.right_stick_y);
@@ -54,39 +53,21 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
         }
         extendingMotor.setPower(0);
         retractingMotor.setPower(0);
-        flicker.setPosition(SERVO_START);
     }
-    
+
     protected void setupHardware() {
         //Initializes the motor/servo variables here
-        wheels = new TwoWheels(this, new TwoWheels.WheelConfiguration("leftMotor","rightMotor",DcMotorSimple.Direction.REVERSE, DcMotorSimple.Direction.FORWARD));
+        TwoWheels.WheelConfiguration configuration = new TwoWheels.WheelConfiguration("leftMotor","rightMotor", DcMotor.Direction.FORWARD, DcMotor.Direction.REVERSE);
+        wheels = new TwoWheels(this, configuration);
         driving = new TankControlsDrivingController(wheels, gamepad1);
         extendingMotor = getMotor("extendingMotor");
         retractingMotor = getMotor("retractingMotor");
         extendingMotor.setDirection(DcMotor.Direction.FORWARD);
         retractingMotor.setDirection(DcMotor.Direction.REVERSE);
-        flicker = getServo("flickerServo");
-        flicker.setPosition(SERVO_START);
     }
-        
+
     protected void setupButtons() {
         buttons = new ButtonManager();
-        buttons.add(new Toggle() {
-            @Override
-            public void onActivate() {
-                flicker.setPosition(SERVO_END);
-            }
-
-            @Override
-            public void onDeactivate() {
-                flicker.setPosition(SERVO_START);
-            }
-
-            @Override
-            public boolean isInputPressed() {
-                return gamepad2.a;
-            }
-        });
     }
 
     @Override
