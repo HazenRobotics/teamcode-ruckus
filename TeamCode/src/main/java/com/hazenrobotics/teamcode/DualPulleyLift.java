@@ -43,6 +43,10 @@ public class DualPulleyLift {
         runByCoefficients(condition, calculateSlide(direction), speed);
     }
 
+    public void initPower(double power){
+        retractingMotor.setPower(power);
+    }
+
     public Coefficients calculateSlide(Direction direction) {
         Coefficients coefficients = new Coefficients();
 

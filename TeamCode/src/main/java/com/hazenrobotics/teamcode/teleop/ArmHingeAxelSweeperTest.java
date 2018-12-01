@@ -1,13 +1,9 @@
 package com.hazenrobotics.teamcode.teleop;
 
 import com.hazenrobotics.commoncode.interfaces.OpModeInterface;
-import com.hazenrobotics.commoncode.movement.DrivingController;
-import com.hazenrobotics.commoncode.movement.TankControlsDrivingController;
-import com.hazenrobotics.commoncode.movement.TwoWheels;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
@@ -15,63 +11,36 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-@TeleOp(name="TeleOp", group="TeleOp")
-public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
-    //Add all global objects and lists
-
-    //Add Motors, Servos, Sensors, etc here
-    protected TwoWheels wheels;
-    protected DrivingController driving;
-    protected DcMotor extendingMotor, retractingMotor;
-
-
+//Test program intended to move all 4 motors on the arm mechanism.
+@TeleOp(name = "Arm-Hinge-Axel-Sweeper Test", group = "Test")
+public class ArmHingeAxelSweeperTest extends LinearOpMode implements OpModeInterface {
     //Motors
     protected DcMotor armMotor;
     protected DcMotor hingeMotor;
     protected DcMotor axelMotor;
     protected DcMotor sweeperMotor;
     //Constants
-    protected static final double SPEED = 0.3;
-    protected static final double LIFT_POWER = 0.15;
-    protected boolean liftLimit = false;
+    protected static final double SPEED = 0.5;
 
     @Override
-    public void runOpMode() {
+    public void runOpMode(){
         setupHardware();
-        //Add any further initialization (methods) here
-
-        telemetry.addData("Inited", "");
-        telemetry.update();
-
         waitForStart();
-
-        while (opModeIsActive()) {
-            telemetry.addData("Started", "");
-            telemetry.update();
-            driving.updateMotion();
-            Lift();
+        while(opModeIsActive()){
             Arm();
             Hinge();
             Axel();
             Sweeper();
             idle();
         }
-        extendingMotor.setPower(0);
-        retractingMotor.setPower(0);
         armMotor.setPower(0);
         hingeMotor.setPower(0);
         axelMotor.setPower(0);
         sweeperMotor.setPower(0);
     }
 
-    protected void setupHardware() {
-        //Initializes the motor/servo variables here
-        wheels = new TwoWheels(this, new TwoWheels.WheelConfiguration("leftMotor","rightMotor",DcMotorSimple.Direction.REVERSE, DcMotorSimple.Direction.FORWARD));
-        driving = new TankControlsDrivingController(wheels, gamepad1);
-        extendingMotor = getMotor("extendingMotor");
-        retractingMotor = getMotor("retractingMotor");
-        extendingMotor.setDirection(DcMotor.Direction.FORWARD);
-        retractingMotor.setDirection(DcMotor.Direction.REVERSE);
+    protected void setupHardware(){
+        //initializes motor variables
         armMotor = getMotor("armMotor");
         hingeMotor = getMotor("hingeMotor");
         axelMotor = getMotor("axelMotor");
@@ -80,21 +49,6 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
         hingeMotor.setDirection(DcMotor.Direction.FORWARD);
         axelMotor.setDirection(DcMotor.Direction.FORWARD);
         sweeperMotor.setDirection(DcMotor.Direction.FORWARD);
-    }
-
-    //default: lift is controlled by gamepad 2 sticks; if y is hit, maintains power to end.
-    protected void Lift(){
-        if(liftLimit){
-            extendingMotor.setPower(0);
-            retractingMotor.setPower(LIFT_POWER);
-        }
-        else {
-            extendingMotor.setPower(gamepad2.left_stick_y);
-            retractingMotor.setPower(gamepad2.right_stick_y);
-            if(gamepad1.y){
-                liftLimit = true;
-            }
-        }
     }
 
     //Method to extend and retract arm. Uses triggers.
@@ -124,14 +78,15 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     //Method to pivot bucket. Uses b and x buttons.
     protected void Axel(){
         //B lifts bucket up, X lowers bucket down.
-        if(gamepad2.dpad_up){
+        if(gamepad2.b){
             axelMotor.setPower(SPEED);
-        }else if(gamepad2.dpad_down){
+        }else if(gamepad2.x){
             axelMotor.setPower(-SPEED);
         }else{
             axelMotor.setPower(0);
         }
     }
+
 
     //Method to rotate sweeper. Uses bumpers.
     protected void Sweeper(){
@@ -143,6 +98,11 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
         }else{
             sweeperMotor.setPower(0);
         }
+    }
+
+    @Override
+    public Telemetry getTelemetry() {
+        return telemetry;
     }
 
     @Override
@@ -173,10 +133,5 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     @Override
     public HardwareDevice get(String name) {
         return hardwareMap.get(name);
-    }
-
-    @Override
-    public Telemetry getTelemetry() {
-        return telemetry;
     }
 }
