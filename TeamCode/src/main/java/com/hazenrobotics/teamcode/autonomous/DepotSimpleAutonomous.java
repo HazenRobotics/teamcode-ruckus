@@ -1,23 +1,17 @@
 package com.hazenrobotics.teamcode.autonomous;
 
 import com.hazenrobotics.commoncode.interfaces.OpModeInterface;
-import com.hazenrobotics.commoncode.models.conditions.Condition;
-import com.hazenrobotics.commoncode.models.conditions.RangeDistance;
 import com.hazenrobotics.commoncode.models.conditions.Timer;
 import com.hazenrobotics.commoncode.models.distances.Distance;
 import com.hazenrobotics.commoncode.movement.TwoEncoderWheels;
 import com.hazenrobotics.commoncode.movement.TwoWheels;
-import com.hazenrobotics.commoncode.sensors.I2cColorSensor;
-import com.hazenrobotics.commoncode.sensors.I2cRangeSensor;
 import com.hazenrobotics.teamcode.DualPulleyLift;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
-import com.qualcomm.robotcore.hardware.I2cDevice;
 import com.qualcomm.robotcore.hardware.Servo;
 
 //Static Imports for different Units
@@ -26,7 +20,7 @@ import static com.hazenrobotics.commoncode.models.angles.directions.SimpleDirect
 import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.*;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-@Autonomous(name = "Simple Autonomous", group = "Autonomous")
+@Autonomous(name = "Depot Simple Autonomous", group = "Autonomous")
 public class DepotSimpleAutonomous extends LinearOpMode implements OpModeInterface {
 
     protected TwoEncoderWheels wheels;
@@ -49,17 +43,13 @@ public class DepotSimpleAutonomous extends LinearOpMode implements OpModeInterfa
         sweep();
     }
 
-
-
     protected void land() {
 
-        lift.slide(new Timer( 2700), DualPulleyLift.Direction.EXTEND,0.5f);
+        lift.slide(new Timer( 3000), DualPulleyLift.Direction.EXTEND,0.5f);
         wheels.move(new Timer(2200), BACKWARDS);
     }
 
     protected void sweep(){
-        axelMotor.setPower(-0.3);
-        sleep(500);
         sweeperMotor.setPower(SWEEPER_SPEED);
         sleep(1000);
         sweeperMotor.setPower(0);

@@ -1,11 +1,11 @@
-package com.hazenrobotics.teamcode;
+package com.hazenrobotics.teamcode.teleop;
 
 import com.hazenrobotics.commoncode.interfaces.OpModeInterface;
-import com.hazenrobotics.commoncode.models.conditions.Condition;
-import com.hazenrobotics.commoncode.models.conditions.Timer;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.hazenrobotics.teamcode.DualPulleyLift;
+import com.hazenrobotics.teamcode.DualPulleyLiftController;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -14,25 +14,25 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-//basic idea
-public class LiftAutonomous extends LinearOpMode implements OpModeInterface {
+@TeleOp(name = "Lift Adjustment (NOT TELEOP!)",group = "Utility")
+public class LiftAdjustment extends LinearOpMode implements OpModeInterface {
     protected DualPulleyLift lift;
+    protected DualPulleyLiftController controller;
 
     @Override
-    public void runOpMode(){
+    public void runOpMode() {
         setupHardware();
         waitForStart();
-
-        //The timer is variable(2000-2500)
-        lift.slide(new Timer(2500), DualPulleyLift.Direction.EXTEND);
-        for(Condition t = new Timer(3000); !t.isTrue(); idle());
-        lift.slide(new Timer(2500), DualPulleyLift.Direction.RETRACT);
+        while(opModeIsActive()){
+            controller.updateMotion();
+            idle();
+        }
+        controller.stopMotion();
     }
-
-    public void setupHardware(){
-        lift = new DualPulleyLift(this, "lift1", "lift2", 0.5f);
+    protected void setupHardware(){
+        lift = new DualPulleyLift(this, "extendingMotor", "retractingMotor", 1.0f);
+        controller = new DualPulleyLiftController(lift, gamepad2, gamepad1, 1f);
     }
-
     @Override
     public Gamepad getGamepad1() {
         return gamepad1;

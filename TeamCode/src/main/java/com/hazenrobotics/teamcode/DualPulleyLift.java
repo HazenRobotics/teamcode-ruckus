@@ -47,13 +47,15 @@ public class DualPulleyLift {
         retractingMotor.setPower(power);
     }
 
+    protected static final float RETRACTING_SLOWER_SPEED = 0.36f;
+
     public Coefficients calculateSlide(Direction direction) {
         Coefficients coefficients = new Coefficients();
 
         //TODO: Might need more complex control over motors here (maybe even be based off of their current pos.)
         //Multiply by modifier when reversing to ensure tension stays on both pulleys
         coefficients.extending = direction.equals(Direction.EXTEND) ? 1f : -1f * unravelingSpeedModifier;
-        coefficients.retracting = direction.equals(Direction.EXTEND) ? -0.3f * unravelingSpeedModifier : 0.3f;
+        coefficients.retracting = direction.equals(Direction.EXTEND) ? -RETRACTING_SLOWER_SPEED * unravelingSpeedModifier : RETRACTING_SLOWER_SPEED;
         return coefficients;
     }
 
