@@ -26,11 +26,8 @@ public class CraterSimpleAutonomous extends LinearOpMode implements OpModeInterf
 
     protected TwoEncoderWheels wheels;
     protected DualPulleyLift lift;
-    protected DcMotor sweeperMotor;
-    protected DcMotor axelMotor;
 
     protected final static double LIFT_POWER = 0.15;
-    protected final static double SWEEPER_SPEED = 0.5;
 
     @Override
     public void runOpMode() {
@@ -40,20 +37,12 @@ public class CraterSimpleAutonomous extends LinearOpMode implements OpModeInterf
         waitForStart();
 
         land();
-
-        //sweep();
     }
 
     protected void land() {
 
         lift.slide(new Timer( 3000), DualPulleyLift.Direction.EXTEND,0.5f);
         wheels.move(new Timer(2200), BACKWARDS);
-    }
-
-    protected void sweep(){
-        sweeperMotor.setPower(SWEEPER_SPEED);
-        sleep(1000);
-        sweeperMotor.setPower(0);
     }
 
     protected void setupHardware() {
@@ -76,11 +65,6 @@ public class CraterSimpleAutonomous extends LinearOpMode implements OpModeInterf
                 "extendingMotor", //Extending name
                 "retractingMotor", //Retracting name
                 1.0f); //Speed
-
-        sweeperMotor = getMotor("sweeperMotor");
-        sweeperMotor.setDirection(DcMotor.Direction.FORWARD);
-        axelMotor = getMotor("axelMotor");
-        axelMotor.setDirection(DcMotor.Direction.FORWARD);
     }
 
     @Override
