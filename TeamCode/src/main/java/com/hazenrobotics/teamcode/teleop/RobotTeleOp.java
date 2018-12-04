@@ -33,7 +33,9 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     protected DcMotor axelMotor;
     protected DcMotor sweeperMotor;
     //Constants
-    protected static final double SPEED = 0.3;
+    protected static final double PIVOT_SPEED = 0.3;
+    protected static final double ARM_EXTENDING_SPEED = 0.5;
+    protected static final double SWEEPER_SPEED = 0.2;
 
     @Override
     public void runOpMode() {
@@ -88,9 +90,9 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     protected void Arm(){
         //Right trigger extends, left trigger retracts.
         if(gamepad2.right_trigger>=0.05){
-            armMotor.setPower(gamepad2.right_trigger*SPEED);
+            armMotor.setPower(gamepad2.right_trigger*ARM_EXTENDING_SPEED);
         }else if(gamepad2.left_trigger>=0.05){
-            armMotor.setPower(-gamepad2.left_trigger*SPEED);
+            armMotor.setPower(-gamepad2.left_trigger*ARM_EXTENDING_SPEED);
         }else{
             armMotor.setPower(0);
         }
@@ -100,9 +102,9 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     protected void Hinge(){
         //Y lifts arm up, A lowers arm down.
         if(gamepad2.y){
-            hingeMotor.setPower(SPEED);
+            hingeMotor.setPower(PIVOT_SPEED);
         }else if(gamepad2.a){
-            hingeMotor.setPower(-SPEED);
+            hingeMotor.setPower(-PIVOT_SPEED);
         }else{
             hingeMotor.setPower(0);
         }
@@ -112,9 +114,9 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     protected void Axel(){
         //B lifts bucket up, X lowers bucket down.
         if(gamepad2.dpad_up){
-            axelMotor.setPower(SPEED);
+            axelMotor.setPower(PIVOT_SPEED);
         }else if(gamepad2.dpad_down){
-            axelMotor.setPower(-SPEED);
+            axelMotor.setPower(-PIVOT_SPEED);
         }else{
             axelMotor.setPower(0);
         }
@@ -124,9 +126,9 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
     protected void Sweeper(){
         //Right bumper sweeps things into scoop, left bumper spits stuff out.
         if(gamepad2.right_bumper){
-            sweeperMotor.setPower(-SPEED);
+            sweeperMotor.setPower(-SWEEPER_SPEED);
         }else if(gamepad2.left_bumper){
-            sweeperMotor.setPower(SPEED);
+            sweeperMotor.setPower(SWEEPER_SPEED);
         }else{
             sweeperMotor.setPower(0);
         }
