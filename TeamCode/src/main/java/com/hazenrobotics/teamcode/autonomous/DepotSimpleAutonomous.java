@@ -26,7 +26,6 @@ public class DepotSimpleAutonomous extends LinearOpMode implements OpModeInterfa
     protected TwoEncoderWheels wheels;
     protected DualPulleyLift lift;
     protected DcMotor sweeperMotor;
-    protected DcMotor axelMotor;
 
     protected final static double LIFT_POWER = 0.15;
     protected final static double SWEEPER_SPEED = 0.5;
@@ -78,8 +77,6 @@ public class DepotSimpleAutonomous extends LinearOpMode implements OpModeInterfa
 
         sweeperMotor = getMotor("sweeperMotor");
         sweeperMotor.setDirection(DcMotor.Direction.FORWARD);
-        axelMotor = getMotor("axelMotor");
-        axelMotor.setDirection(DcMotor.Direction.FORWARD);
     }
 
     @Override
