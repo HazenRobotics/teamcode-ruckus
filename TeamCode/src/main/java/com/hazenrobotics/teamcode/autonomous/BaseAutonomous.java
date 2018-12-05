@@ -1,5 +1,6 @@
 package com.hazenrobotics.teamcode.autonomous;
 
+import com.hazenrobotics.commoncode.control.BaseOpMode;
 import com.hazenrobotics.commoncode.interfaces.OpModeInterface;
 import com.hazenrobotics.commoncode.models.angles.Angle;
 import static com.hazenrobotics.commoncode.models.angles.UnnormalizedAngleUnit.*;
@@ -39,7 +40,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.*;
 
-public abstract class BaseAutonomous extends LinearOpMode implements OpModeInterface {
+public abstract class BaseAutonomous extends BaseOpMode {
     protected static final Distance DISTANCE_FROM_LEFT_WALL = new Distance(13.798f, INCH);
     protected static final Distance DISTANCE_FROM_RIGHT_WALL = new Distance(2.971f, INCH);
 
@@ -136,39 +137,5 @@ public abstract class BaseAutonomous extends LinearOpMode implements OpModeInter
         TwoEncoderWheels.EncoderConfiguration encoderConfiguration = new TwoEncoderWheels.EncoderConfiguration(1680, new Distance(101.06f, MM), new Distance(37.3f, CM));
         TwoWheels.SpeedSettings speeds = new TwoWheels.SpeedSettings(1f, 0.5f, 0.7f);
         wheels = new TwoEncoderWheels(this, wheelConfiguration, encoderConfiguration, speeds);
-    }
-
-    @Override
-    public Gamepad getGamepad1() {
-        return gamepad1;
-    }
-
-    @Override
-    public Gamepad getGamepad2() {
-        return gamepad2;
-    }
-
-    @Override
-    public DcMotor getMotor(String name) {
-        return hardwareMap.dcMotor.get(name);
-    }
-
-    @Override
-    public Servo getServo(String name) {
-        return hardwareMap.servo.get(name);
-    }
-
-    @Override
-    public DigitalChannel getDigitalChannel(String name) {
-        return hardwareMap.digitalChannel.get(name);
-    }
-
-    @Override
-    public HardwareDevice get(String name) {
-        return hardwareMap.get(name);
-    }
-
-    public Telemetry getTelemetry() {
-        return telemetry;
     }
 }

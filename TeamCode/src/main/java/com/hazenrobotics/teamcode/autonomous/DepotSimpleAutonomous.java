@@ -1,5 +1,6 @@
 package com.hazenrobotics.teamcode.autonomous;
 
+import com.hazenrobotics.commoncode.control.BaseOpMode;
 import com.hazenrobotics.commoncode.interfaces.OpModeInterface;
 import com.hazenrobotics.commoncode.models.conditions.Timer;
 import com.hazenrobotics.commoncode.models.distances.Distance;
@@ -21,8 +22,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.*
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 @Autonomous(name = "Depot Simple Autonomous", group = "Autonomous")
-public class DepotSimpleAutonomous extends LinearOpMode implements OpModeInterface {
-
+public class DepotSimpleAutonomous extends BaseOpMode {
     protected TwoEncoderWheels wheels;
     protected DualPulleyLift lift;
     protected DcMotor sweeperMotor;
@@ -80,40 +80,5 @@ public class DepotSimpleAutonomous extends LinearOpMode implements OpModeInterfa
         sweeperMotor.setDirection(DcMotor.Direction.FORWARD);
         axelMotor = getMotor("axelMotor");
         axelMotor.setDirection(DcMotor.Direction.FORWARD);
-    }
-
-    @Override
-    public Gamepad getGamepad1() {
-        return gamepad1;
-    }
-
-    @Override
-    public Gamepad getGamepad2() {
-        return gamepad2;
-    }
-
-    @Override
-    public DcMotor getMotor(String name) {
-        return hardwareMap.dcMotor.get(name);
-    }
-
-    @Override
-    public Servo getServo(String name) {
-        return hardwareMap.servo.get(name);
-    }
-
-    @Override
-    public DigitalChannel getDigitalChannel(String name) {
-        return hardwareMap.digitalChannel.get(name);
-    }
-
-    @Override
-    public HardwareDevice get(String name) {
-        return hardwareMap.get(name);
-    }
-
-    @Override
-    public Telemetry getTelemetry() {
-        return telemetry;
     }
 }

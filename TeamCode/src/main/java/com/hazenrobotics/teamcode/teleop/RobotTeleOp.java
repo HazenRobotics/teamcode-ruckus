@@ -1,5 +1,6 @@
 package com.hazenrobotics.teamcode.teleop;
 
+import com.hazenrobotics.commoncode.control.BaseOpMode;
 import com.hazenrobotics.commoncode.interfaces.OpModeInterface;
 import com.hazenrobotics.commoncode.movement.DrivingController;
 import com.hazenrobotics.commoncode.movement.TankControlsDrivingController;
@@ -18,7 +19,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @TeleOp(name="TeleOp", group="TeleOp")
-public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
+public class RobotTeleOp extends BaseOpMode {
     //Add all global objects and lists
 
     //Add Motors, Servos, Sensors, etc here
@@ -132,40 +133,5 @@ public class RobotTeleOp extends LinearOpMode implements OpModeInterface {
         }else{
             sweeperMotor.setPower(0);
         }
-    }
-
-    @Override
-    public Gamepad getGamepad1() {
-        return gamepad1;
-    }
-
-    @Override
-    public Gamepad getGamepad2() {
-        return gamepad2;
-    }
-
-    @Override
-    public DcMotor getMotor(String name) {
-        return hardwareMap.dcMotor.get(name);
-    }
-
-    @Override
-    public Servo getServo(String name) {
-        return hardwareMap.servo.get(name);
-    }
-
-    @Override
-    public DigitalChannel getDigitalChannel(String name) {
-        return hardwareMap.digitalChannel.get(name);
-    }
-
-    @Override
-    public HardwareDevice get(String name) {
-        return hardwareMap.get(name);
-    }
-
-    @Override
-    public Telemetry getTelemetry() {
-        return telemetry;
     }
 }
