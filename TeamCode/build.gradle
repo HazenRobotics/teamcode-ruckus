@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply from: './apply-properties.gradle'
 
 android {
     compileSdkVersion 27
@@ -62,11 +63,6 @@ dependencies {
     implementation "org.first.ftc:hardware:$ftc_version"
 
     //Hazen Robotics Common Code
-    Properties properties = new Properties()
-    properties.load(new FileInputStream(file('../local.properties')))
-    if (properties.getProperty('useLocalCommonCode') != null) {
-        useLocalCommonCode = properties.getProperty('useLocalCommonCode')
-    }
     if (useLocalCommonCode.toBoolean()) {
         implementation project(":CommonCode")
     } else {

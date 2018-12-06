@@ -1,0 +1,10 @@
+Properties props = new Properties()
+props.load(new FileInputStream('./local.properties'))
+
+GroovyObject context = this
+props.each { prop ->
+    if (context.hasProperty(prop.key)) {
+        println (prop.key + " : " + prop.value)
+        context.setProperty(prop.key, prop.value)
+    }
+}
