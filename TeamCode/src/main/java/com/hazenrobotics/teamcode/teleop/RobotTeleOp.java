@@ -61,6 +61,8 @@ public class RobotTeleOp extends BaseOpMode {
         //Initializes the motor/servo variables here
         wheels = new TwoWheels(this, new TwoWheels.WheelConfiguration("leftMotor","rightMotor",DcMotorSimple.Direction.REVERSE, DcMotorSimple.Direction.FORWARD));
         driving = new TankControlsDrivingController(wheels, gamepad1);
+        ((TankControlsDrivingController) driving).reverseDirection();
+
 
         lift = new DualPulleyLift(this, "extendingMotor", "retractingMotor", 1.0f);
         liftController = new DualPulleyLiftController(lift, gamepad2, gamepad1, 1f);

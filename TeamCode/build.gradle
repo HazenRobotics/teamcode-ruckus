@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply from: './apply-properties.gradle'
+apply from: '../apply-properties.gradle'
 
 android {
     compileSdkVersion 27

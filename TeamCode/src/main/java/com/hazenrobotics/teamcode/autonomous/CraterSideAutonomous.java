@@ -5,7 +5,7 @@ import static com.hazenrobotics.commoncode.models.angles.UnnormalizedAngleUnit.*
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-@Disabled
+
 @Autonomous(name = "Crater Side", group = "Base Autonomous")
 public class CraterSideAutonomous extends BaseAutonomous {
 

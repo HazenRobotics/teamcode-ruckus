@@ -14,6 +14,7 @@ import com.hazenrobotics.commoncode.models.conditions.ColorMatch;
 import com.hazenrobotics.commoncode.models.conditions.Condition;
 import com.hazenrobotics.commoncode.models.conditions.GyroAngle;
 import com.hazenrobotics.commoncode.models.conditions.RangeDistance;
+import com.hazenrobotics.commoncode.models.conditions.Timer;
 import com.hazenrobotics.commoncode.models.distances.Distance;
 import com.hazenrobotics.commoncode.movement.TwoEncoderWheels;
 import com.hazenrobotics.commoncode.movement.TwoWheels;
@@ -25,6 +26,7 @@ import com.hazenrobotics.commoncode.sensors.I2cRangeSensor;
 import com.hazenrobotics.commoncode.sensors.InterfaceGyro;
 import com.hazenrobotics.commoncode.sensors.RangeSensor;
 
+import com.hazenrobotics.teamcode.DualPulleyLift;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -52,14 +54,22 @@ public abstract class BaseAutonomous extends BaseOpMode {
 
     protected Angle angleToDepot;
 
+    protected DualPulleyLift lift;
+
+    protected final static double LIFT_POWER = 0.15;
+
     public BaseAutonomous(Angle angleToDepot) {
         this.angleToDepot = angleToDepot;
     }
 
     public void runOpMode() {
         setupHardware();
+
+        lift.initPower(LIFT_POWER);
+
         telemetry.addLine("Initialized");
         telemetry.update();
+
 
         waitForStart();
 
@@ -74,9 +84,9 @@ public abstract class BaseAutonomous extends BaseOpMode {
 
 
     protected void landAndMove() {
-        //TODO: Drop down code
         telemetry.addLine("Landing");
         telemetry.update();
+        lift.slide(new Timer( 3000), DualPulleyLift.Direction.EXTEND,0.5f);
 
         //Move forward to not hit lander
         wheels.move(new Distance(10, INCH), FORWARDS);
@@ -137,5 +147,10 @@ public abstract class BaseAutonomous extends BaseOpMode {
         TwoEncoderWheels.EncoderConfiguration encoderConfiguration = new TwoEncoderWheels.EncoderConfiguration(1680, new Distance(101.06f, MM), new Distance(37.3f, CM));
         TwoWheels.SpeedSettings speeds = new TwoWheels.SpeedSettings(1f, 0.5f, 0.7f);
         wheels = new TwoEncoderWheels(this, wheelConfiguration, encoderConfiguration, speeds);
+
+        lift = new DualPulleyLift(this,
+                "extendingMotor", //Extending name
+                "retractingMotor", //Retracting name
+                1.0f, 0.5f); //Speed
     }
 }
