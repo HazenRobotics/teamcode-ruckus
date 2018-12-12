@@ -1,34 +1,37 @@
 package com.hazenrobotics.teamcode.autonomous;
 
 import com.hazenrobotics.commoncode.control.BaseOpMode;
-import com.hazenrobotics.commoncode.interfaces.OpModeInterface;
+import com.hazenrobotics.commoncode.models.angles.Angle;
+import com.hazenrobotics.commoncode.models.angles.AngleUnit;
+import com.hazenrobotics.commoncode.models.angles.directions.RotationDirection;
+import com.hazenrobotics.commoncode.models.conditions.Condition;
+import com.hazenrobotics.commoncode.models.conditions.GyroAngle;
 import com.hazenrobotics.commoncode.models.conditions.Timer;
 import com.hazenrobotics.commoncode.models.distances.Distance;
 import com.hazenrobotics.commoncode.movement.TwoEncoderWheels;
 import com.hazenrobotics.commoncode.movement.TwoWheels;
+import com.hazenrobotics.commoncode.sensors.GyroSensor;
+import com.hazenrobotics.commoncode.sensors.InterfaceGyro;
 import com.hazenrobotics.teamcode.DualPulleyLift;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.HardwareDevice;
-import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
+import static com.hazenrobotics.commoncode.models.angles.directions.SimpleDirection.FORWARDS;
+import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.CM;
+import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.MM;
 
 //Static Imports for different Units
-import static com.hazenrobotics.commoncode.models.angles.directions.RotationDirection.*;
-import static com.hazenrobotics.commoncode.models.angles.directions.SimpleDirection.*;
-import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.*;
 
-@Autonomous(name = "Crater Simple Autonomous", group = "Autonomous")
-public class CraterSimpleAutonomous extends BaseOpMode {
-
+@Autonomous(name = "Depot Intermediate Autonomous", group = "Autonomous")
+public class DepotIntermediateAutonomous extends BaseOpMode {
     protected TwoEncoderWheels wheels;
     protected DualPulleyLift lift;
+    protected DcMotor sweeperMotor;
+    protected GyroSensor gyroSensor;
 
     protected final static double LIFT_POWER = 0.15;
+    protected final static double SWEEPER_SPEED = 0.5;
+
 
     @Override
     public void runOpMode() {
@@ -38,12 +41,28 @@ public class CraterSimpleAutonomous extends BaseOpMode {
         waitForStart();
 
         land();
+
+        sweep();
+
+        park();
     }
 
     protected void land() {
 
         lift.slide(new Timer( 3000), DualPulleyLift.Direction.EXTEND,0.5f);
         wheels.move(new Timer(2200), FORWARDS);
+    }
+
+    protected void sweep(){
+        sweeperMotor.setPower(SWEEPER_SPEED);
+        sleep(1000);
+        sweeperMotor.setPower(0);
+    }
+
+    protected void park(){
+        wheels.turn(new GyroAngle(new Angle(135f,AngleUnit.DEGREES), gyroSensor, RotationDirection.CLOCKWISE), RotationDirection.CLOCKWISE);
+        //wheels.turn(new Timer(1500),RotationDirection.CLOCKWISE);
+        wheels.move(new Timer(3300), FORWARDS);
     }
 
     protected void setupHardware() {
@@ -66,5 +85,11 @@ public class CraterSimpleAutonomous extends BaseOpMode {
                 "extendingMotor", //Extending name
                 "retractingMotor", //Retracting name
                 1.0f); //Speed
+
+        gyroSensor = new InterfaceGyro(this, "gyroSensor");
+        gyroSensor.calibrate();
+
+        sweeperMotor = getMotor("sweeperMotor");
+        sweeperMotor.setDirection(DcMotor.Direction.FORWARD);
     }
 }

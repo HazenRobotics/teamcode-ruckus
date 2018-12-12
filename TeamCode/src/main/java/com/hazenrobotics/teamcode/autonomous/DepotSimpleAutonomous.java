@@ -45,7 +45,7 @@ public class DepotSimpleAutonomous extends BaseOpMode {
     protected void land() {
 
         lift.slide(new Timer( 3000), DualPulleyLift.Direction.EXTEND,0.5f);
-        wheels.move(new Timer(2200), BACKWARDS);
+        wheels.move(new Timer(2200), FORWARDS);
     }
 
     protected void sweep(){

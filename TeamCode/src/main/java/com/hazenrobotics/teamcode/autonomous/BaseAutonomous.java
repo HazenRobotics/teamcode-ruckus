@@ -27,6 +27,7 @@ import com.hazenrobotics.commoncode.sensors.InterfaceGyro;
 import com.hazenrobotics.commoncode.sensors.RangeSensor;
 
 import com.hazenrobotics.teamcode.DualPulleyLift;
+import com.hazenrobotics.teamcode.ExtendyArm;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -46,6 +47,8 @@ public abstract class BaseAutonomous extends BaseOpMode {
     protected static final Distance DISTANCE_FROM_LEFT_WALL = new Distance(13.798f, INCH);
     protected static final Distance DISTANCE_FROM_RIGHT_WALL = new Distance(2.971f, INCH);
 
+    protected final static double SWEEPER_SPEED = 0.5;
+
     protected ColorSensor<SensorColor> colorSensorSide;
     protected ColorSensor<SensorColor> colorSensorBottom;
     protected RangeSensor rangeSensorFront;
@@ -55,6 +58,7 @@ public abstract class BaseAutonomous extends BaseOpMode {
     protected Angle angleToDepot;
 
     protected DualPulleyLift lift;
+    protected ExtendyArm arm;
 
     protected final static double LIFT_POWER = 0.15;
 
@@ -118,7 +122,9 @@ public abstract class BaseAutonomous extends BaseOpMode {
         //Robot moves to Depot and puts marker down to cliam
         wheels.move(new RangeDistance(new Distance(24, INCH), rangeSensorFront, false), FORWARDS);
 
-        //TODO: Claim depot
+        arm.setPowerToBucketSweeper(SWEEPER_SPEED);
+        sleep(1000);
+        arm.setPowerToBucketSweeper(0);
         telemetry.addLine("Claim Depot Here");
         telemetry.update();
 
@@ -151,6 +157,8 @@ public abstract class BaseAutonomous extends BaseOpMode {
         lift = new DualPulleyLift(this,
                 "extendingMotor", //Extending name
                 "retractingMotor", //Retracting name
-                1.0f, 0.5f); //Speed
+                1.0f); //Speed
+
+        arm = new ExtendyArm(this, "armMotor", "hingeMotor", "axelMotor", "sweeperMotor");
     }
 }
