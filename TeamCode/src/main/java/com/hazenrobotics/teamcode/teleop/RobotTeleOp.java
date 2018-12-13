@@ -50,6 +50,8 @@ public class RobotTeleOp extends BaseOpMode {
 
             liftController.updateMotion();
             armController.updateMotion();
+
+
         }
         liftController.stopMotion();
         armController.stopMotion();

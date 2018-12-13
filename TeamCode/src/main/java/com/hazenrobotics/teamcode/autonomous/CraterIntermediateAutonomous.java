@@ -5,8 +5,6 @@ import com.hazenrobotics.commoncode.models.angles.Angle;
 import com.hazenrobotics.commoncode.models.angles.AngleUnit;
 import com.hazenrobotics.commoncode.models.angles.directions.RotationDirection;
 import com.hazenrobotics.commoncode.models.angles.directions.SideDirection;
-import com.hazenrobotics.commoncode.models.angles.directions.SimpleDirection;
-import com.hazenrobotics.commoncode.models.conditions.Condition;
 import com.hazenrobotics.commoncode.models.conditions.GyroAngle;
 import com.hazenrobotics.commoncode.models.conditions.Timer;
 import com.hazenrobotics.commoncode.models.distances.Distance;
@@ -18,14 +16,15 @@ import com.hazenrobotics.teamcode.DualPulleyLift;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import static com.hazenrobotics.commoncode.models.angles.directions.SimpleDirection.BACKWARDS;
 import static com.hazenrobotics.commoncode.models.angles.directions.SimpleDirection.FORWARDS;
 import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.CM;
 import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.MM;
 
 //Static Imports for different Units
 
-@Autonomous(name = "Depot Intermediate Autonomous", group = "Intermediate")
-public class DepotIntermediateAutonomous extends BaseOpMode {
+@Autonomous(name = "Crater Intermediate Autonomous", group = "Intermediate")
+public class CraterIntermediateAutonomous extends BaseOpMode {
     protected TwoEncoderWheels wheels;
     protected DualPulleyLift lift;
     protected DcMotor sweeperMotor;
@@ -44,6 +43,8 @@ public class DepotIntermediateAutonomous extends BaseOpMode {
 
         land();
 
+        toDepot();
+
         sweep();
 
         park();
@@ -52,8 +53,18 @@ public class DepotIntermediateAutonomous extends BaseOpMode {
     protected void land() {
 
         lift.slide(new Timer( 3300), DualPulleyLift.Direction.EXTEND,0.5f);
-        wheels.move(new Timer(2500), FORWARDS);
+        wheels.move(new Timer(2000), FORWARDS,0.5f);
+        sleep(500);
+        wheels.move(new Timer(900),BACKWARDS,0.5f);
     }
+
+    protected void toDepot(){
+        wheels.turn(new GyroAngle(new Angle(70, AngleUnit.DEGREES), gyroSensor, RotationDirection.COUNTER_CLOCKWISE), RotationDirection.COUNTER_CLOCKWISE);
+        wheels.move(new Timer(2350),FORWARDS);
+        wheels.curve(new Timer(2000), FORWARDS, SideDirection.LEFT, 0.2f, 0.4f);
+        wheels.move(new Timer(1250),FORWARDS);
+    }
+
 
     protected void sweep(){
         sweeperMotor.setPower(SWEEPER_SPEED);
@@ -67,11 +78,8 @@ public class DepotIntermediateAutonomous extends BaseOpMode {
         wheels.move(new Timer(3700), FORWARDS);
         wheels.move(new Timer(300), FORWARDS, 0.3f);*/
 
-        wheels.turn(new GyroAngle(new Angle(90,AngleUnit.DEGREES), gyroSensor, RotationDirection.CLOCKWISE), RotationDirection.CLOCKWISE);
-        wheels.move(new Timer(700), FORWARDS);
-        wheels.curve(new Timer(2000), FORWARDS, SideDirection.RIGHT, 0.2f, 0.4f);
-        wheels.move(new Timer(3000), FORWARDS);
-        wheels.move(new Timer(300), FORWARDS, 0.3f);
+        wheels.curve(new Timer(3500), BACKWARDS, SideDirection.LEFT, 0.85f, 1f);
+        wheels.move(new Timer(300), BACKWARDS, 0.3f);
     }
 
     protected void setupHardware() {
