@@ -61,8 +61,8 @@ public class CraterIntermediateAutonomous extends BaseOpMode {
     protected void toDepot(){
         wheels.turn(new GyroAngle(new Angle(70, AngleUnit.DEGREES), gyroSensor, RotationDirection.COUNTER_CLOCKWISE), RotationDirection.COUNTER_CLOCKWISE);
         wheels.move(new Timer(2000),FORWARDS);
-        wheels.curve(new Timer(2000), FORWARDS, SideDirection.LEFT, 0.2f, 0.4f);
-        wheels.move(new Timer(1250),FORWARDS);
+        wheels.turn(new GyroAngle(new Angle(45, AngleUnit.DEGREES), gyroSensor, RotationDirection.COUNTER_CLOCKWISE), RotationDirection.COUNTER_CLOCKWISE);
+        wheels.move(new Timer(1500),FORWARDS);
     }
 
 
@@ -78,7 +78,7 @@ public class CraterIntermediateAutonomous extends BaseOpMode {
         wheels.move(new Timer(3700), FORWARDS);
         wheels.move(new Timer(300), FORWARDS, 0.3f);*/
 
-        wheels.curve(new Timer(3500), BACKWARDS, SideDirection.LEFT, 0.85f, 1f);
+        wheels.curve(new Timer(3300), BACKWARDS, SideDirection.LEFT, 0.85f, 1f);
         wheels.move(new Timer(300), BACKWARDS, 0.3f);
     }
 
