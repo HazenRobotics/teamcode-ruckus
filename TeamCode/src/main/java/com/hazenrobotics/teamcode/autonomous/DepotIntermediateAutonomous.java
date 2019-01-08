@@ -67,10 +67,12 @@ public class DepotIntermediateAutonomous extends BaseOpMode {
         wheels.move(new Timer(3700), FORWARDS);
         wheels.move(new Timer(300), FORWARDS, 0.3f);*/
 
-        wheels.turn(new GyroAngle(new Angle(90,AngleUnit.DEGREES), gyroSensor, RotationDirection.CLOCKWISE), RotationDirection.CLOCKWISE);
-        wheels.move(new Timer(500), FORWARDS);
-        wheels.curve(new Timer(1950), FORWARDS, SideDirection.RIGHT, 0.2f, 0.4f);
-        wheels.move(new Timer(3000), FORWARDS);
+        wheels.turn(new GyroAngle(new Angle(90,AngleUnit.DEGREES), gyroSensor, RotationDirection.COUNTER_CLOCKWISE), RotationDirection.COUNTER_CLOCKWISE);
+        wheels.move(new Timer(800), FORWARDS);
+        wheels.turn(new GyroAngle(new Angle(24, AngleUnit.DEGREES), gyroSensor, RotationDirection.COUNTER_CLOCKWISE), RotationDirection.COUNTER_CLOCKWISE, 0.2f);
+        //wheels.curve(new Timer(1500), FORWARDS, SideDirection.RIGHT, 0.2f, 0.4f);
+        wheels.curve(new Timer(3400),  FORWARDS, SideDirection.LEFT, 0.8f, 0.7f);
+        //wheels.move(new Timer(3400), FORWARDS);
         wheels.move(new Timer(300), FORWARDS, 0.3f);
     }
 

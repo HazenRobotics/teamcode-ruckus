@@ -53,16 +53,18 @@ public class CraterIntermediateAutonomous extends BaseOpMode {
     protected void land() {
 
         lift.slide(new Timer( 3300), DualPulleyLift.Direction.EXTEND,0.5f);
-        wheels.move(new Timer(1700), FORWARDS,0.5f);
-        sleep(500);
-        wheels.move(new Timer(800),BACKWARDS,0.5f);
+        wheels.move(new Timer(1500), FORWARDS,0.5f);
+        sleep(5000);
+        wheels.move(new Timer(600),BACKWARDS,0.5f);
     }
 
     protected void toDepot(){
-        wheels.turn(new GyroAngle(new Angle(70, AngleUnit.DEGREES), gyroSensor, RotationDirection.COUNTER_CLOCKWISE), RotationDirection.COUNTER_CLOCKWISE);
-        wheels.move(new Timer(2000),FORWARDS);
-        wheels.turn(new GyroAngle(new Angle(45, AngleUnit.DEGREES), gyroSensor, RotationDirection.COUNTER_CLOCKWISE), RotationDirection.COUNTER_CLOCKWISE);
-        wheels.move(new Timer(1500),FORWARDS);
+        wheels.turn(new GyroAngle(new Angle(90, AngleUnit.DEGREES), gyroSensor, RotationDirection.COUNTER_CLOCKWISE),
+                RotationDirection.COUNTER_CLOCKWISE, 0.2f);
+        wheels.move(new Timer(2200),FORWARDS);
+        wheels.turn(new GyroAngle(new Angle(39, AngleUnit.DEGREES), gyroSensor, RotationDirection.COUNTER_CLOCKWISE),
+                RotationDirection.COUNTER_CLOCKWISE,0.2f );
+        wheels.move(new Timer(2175),FORWARDS);
     }
 
 
@@ -78,7 +80,7 @@ public class CraterIntermediateAutonomous extends BaseOpMode {
         wheels.move(new Timer(3700), FORWARDS);
         wheels.move(new Timer(300), FORWARDS, 0.3f);*/
 
-        wheels.curve(new Timer(3300), BACKWARDS, SideDirection.LEFT, 0.85f, 1f);
+        wheels.curve(new Timer(3300), BACKWARDS, SideDirection.LEFT, 0.90f, 1f);
         wheels.move(new Timer(300), BACKWARDS, 0.3f);
     }
 
